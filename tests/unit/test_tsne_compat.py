@@ -73,4 +73,3 @@ def test_tsne_uses_max_iter_when_supported(monkeypatch):
     assert emb.shape == (10, 2)
     assert seen["kwargs"]["max_iter"] == 456
     assert "n_iter" not in seen["kwargs"]
-
