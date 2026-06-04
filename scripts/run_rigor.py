@@ -4,6 +4,7 @@ import argparse
 import json
 import logging
 import os
+import random
 import re
 import sys
 import time
@@ -18,6 +19,8 @@ log = logging.getLogger("rigor")
 
 SEED = 42
 np.random.seed(SEED)
+random.seed(SEED)
+ig.set_random_number_generator(random.Random(SEED))
 
 TECHNICAL_KEYWORDS = [
     "error", "bug", "fix", "issue", "problem", "help", "solution", "solve",
@@ -101,8 +104,9 @@ def build_edges(posts, comments):
 
 
 def build_graph(edges):
+    edges = edges.sort(["src", "dst"])
     src = edges["src"].to_list(); dst = edges["dst"].to_list(); w = edges["weight"].to_list()
-    names = list(dict.fromkeys(src + dst))
+    names = sorted(set(src + dst))
     idx = {n: i for i, n in enumerate(names)}
     g = ig.Graph(directed=True)
     g.add_vertices(len(names)); g.vs["name"] = names
@@ -147,6 +151,8 @@ def task1(g):
 
 
 def _null_worker(outdeg, indeg, seed):
+    random.seed(seed)
+    ig.set_random_number_generator(random.Random(seed))
     gc = ig.Graph.Degree_Sequence(list(outdeg), list(indeg), method="configuration").simplify()
     return (float(gc.reciprocity()) if gc.ecount() else 0.0,
             float(gc.transitivity_undirected(mode="zero")),
@@ -217,7 +223,7 @@ def task2(posts, n_shuffle=20, gof_iters=0):
     sizes = casc["n_agents"].to_numpy()
     res["total_adopting_agents"] = int(sizes.sum())
     res["powerlaw"] = _safe(lambda: powerlaw_report(sizes, gof_iters))
-    obs = _gini(sizes); agents = p["agent_id"].to_numpy(); norms = p["norm"]
+    obs = _gini(sizes); p = p.sort(["norm", "agent_id"]); agents = p["agent_id"].to_numpy(); norms = p["norm"]
     rng = np.random.RandomState(SEED); nulls = []
     for _ in range(n_shuffle):
         tmp = pl.DataFrame({"agent_id": rng.permutation(agents), "norm": norms})
@@ -495,6 +501,8 @@ def task1_leiden(g, n_null=20):
     from sklearn.preprocessing import StandardScaler
     if g.vcount() < 50:
         return {"result": "insufficient"}
+    random.seed(SEED)
+    ig.set_random_number_generator(random.Random(SEED))
     part = g.community_leiden(objective_function="modularity", weights="weight", n_iterations=3)
     mem = part.membership
     Q = float(g.modularity(mem, weights="weight", directed=True))
@@ -502,6 +510,8 @@ def task1_leiden(g, n_null=20):
     outd, ind = g.outdegree(), g.indegree()
     for i in range(n_null):
         try:
+            random.seed(SEED + 9000 + i)
+            ig.set_random_number_generator(random.Random(SEED + 9000 + i))
             gc = ig.Graph.Degree_Sequence(list(outd), list(ind), method="configuration").simplify()
             gc.es["weight"] = 1
             pc = gc.community_leiden(objective_function="modularity", weights="weight", n_iterations=3)
