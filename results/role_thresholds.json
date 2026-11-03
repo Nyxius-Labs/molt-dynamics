@@ -1,0 +1,103 @@
+{
+  "source": "molt_dynamics.rq1_roles.RoleAnalyzer._classify_single_agent (rules applied in order; first match wins)",
+  "standardization": "z-scores over the agent population (population SD)",
+  "roles": {
+    "Specialist": {
+      "definition": "normalized_entropy < -0.5 SD",
+      "conditions": [
+        {
+          "feature": "normalized_entropy",
+          "operator": "<",
+          "threshold_z": -0.5,
+          "threshold_raw": -0.05251982326332112,
+          "feature_mean": 0.06028825003726747,
+          "feature_sd": 0.22561614660117718
+        }
+      ]
+    },
+    "Connector": {
+      "definition": "betweenness > 0.5 SD",
+      "conditions": [
+        {
+          "feature": "betweenness",
+          "operator": ">",
+          "threshold_z": 0.5,
+          "threshold_raw": 0.00018478005227476015,
+          "feature_mean": 8.361485507814023e-06,
+          "feature_sd": 0.0003528371335338923
+        }
+      ]
+    },
+    "Initiator": {
+      "definition": "post_comment_ratio > 0.5 SD and total_posts > 0 SD (above mean)",
+      "conditions": [
+        {
+          "feature": "post_comment_ratio",
+          "operator": ">",
+          "threshold_z": 0.5,
+          "threshold_raw": 4.237969657802055,
+          "feature_mean": 2.1049113639405332,
+          "feature_sd": 4.266116587723044
+        },
+        {
+          "feature": "total_posts",
+          "operator": ">",
+          "threshold_z": 0.0,
+          "threshold_raw": 2.444225171988005,
+          "feature_mean": 2.444225171988005,
+          "feature_sd": 5.350004734660234
+        }
+      ]
+    },
+    "Synthesizer": {
+      "definition": "post_comment_ratio < -0.5 SD and in_degree > 0 SD (above mean)",
+      "conditions": [
+        {
+          "feature": "post_comment_ratio",
+          "operator": "<",
+          "threshold_z": -0.5,
+          "threshold_raw": -0.02814692992098866,
+          "feature_mean": 2.1049113639405332,
+          "feature_sd": 4.266116587723044
+        },
+        {
+          "feature": "in_degree",
+          "operator": ">",
+          "threshold_z": 0.0,
+          "threshold_raw": 0.9971666078673488,
+          "feature_mean": 0.9971666078673488,
+          "feature_sd": 5.680614819007984
+        }
+      ]
+    },
+    "Generalist": {
+      "definition": "none of the above",
+      "conditions": []
+    }
+  },
+  "role_names_in_paper": [
+    "Generalist",
+    "Initiator",
+    "Amplifier",
+    "Synthesizer",
+    "Curator"
+  ],
+  "role_names_in_code": [
+    "Specialist",
+    "Connector",
+    "Initiator",
+    "Synthesizer",
+    "Generalist"
+  ],
+  "periphery_definition": {
+    "total_degree_le": 1
+  },
+  "kmeans": {
+    "k_range": [
+      3,
+      8
+    ],
+    "n_init": 100,
+    "selection": "max silhouette"
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "hf_repo": "SimulaMet/moltbook-observatory-archive",
+  "random_seed": 42,
+  "primary_revision": "primary",
+  "revisions": {
+    "primary": {
+      "sha": "ee98f6c8a6f2643d40bf852ced3bf7cac0417ca0",
+      "local_dir": "/home/ubuntu/molt-dynamics/data_raw/moltbook-ee98f6c8",
+      "note": "revision pinned by the repo's moltbook-observatory-archive gitlink (export of 2026-02-24); the data the earlier run used",
+      "tables": {
+        "agents": {
+          "n_files": 26,
+          "raw_rows": 90704,
+          "sha256_of_file_hashes": "4a104c54b60962681563c57042d13726b20017061d6962687941820a619affa3"
+        },
+        "comments": {
+          "n_files": 18,
+          "raw_rows": 882486,
+          "sha256_of_file_hashes": "233256fe371c1f577a9fef21b760cabf0a285777f23a903c4d3277269bfe25cf"
+        },
+        "posts": {
+          "n_files": 28,
+          "raw_rows": 260088,
+          "sha256_of_file_hashes": "14a0610ebdb4cd5f697fc71863c9a61a0416ae626ca4d2b1fea081099c8ccd4d"
+        },
+        "snapshots": {
+          "n_files": 26,
+          "raw_rows": 588,
+          "sha256_of_file_hashes": "53c87dc2399b2dee879cbdaf8372171d10009fea193acc068c9b589a4b17306b"
+        },
+        "submolts": {
+          "n_files": 19,
+          "raw_rows": 5260,
+          "sha256_of_file_hashes": "8e6040ddb7736fd40784edb07c83c833213b23e91d30370f7e3950420ad9770a"
+        },
+        "word_frequency": {
+          "n_files": 26,
+          "raw_rows": 84551,
+          "sha256_of_file_hashes": "c33bca5bf37f07cf35cf46661eee81c36bcd9c091d1c5bd5faf78dbe57975f4c"
+        }
+      },
+      "window": {
+        "start_inclusive": "2026-01-28",
+        "end_inclusive": "2026-02-20",
+        "filter": "created_at (UTC) in [start 00:00, end+1 00:00); rows deduplicated by id keeping the latest dump_date",
+        "posts": 222791,
+        "comments": 879629,
+        "comments_with_parent_id": 47122,
+        "agents_table_unique_ids": 90704,
+        "agent_population": 90704,
+        "active_agents_in_window": 73543,
+        "post_authors": 68827,
+        "comment_authors": 10985,
+        "submolts_with_posts": 1817,
+        "first_comment": "2026-01-31T07:46:02.546988",
+        "last_comment": "2026-02-17T18:05:04.701620"
+      }
+    },
+    "head": {
+      "sha": "2bd2498ac0fc7d86148149e0f3d470d5c813538f",
+      "local_dir": "/home/ubuntu/molt-dynamics/moltbook-observatory-archive",
+      "note": "archive head on 2026-10-30; posts backfilled, most early comments no longer present",
+      "tables": {
+        "agents": {
+          "n_files": 207,
+          "raw_rows": 182906,
+          "sha256_of_file_hashes": "fb5f63fcb932cdacae3a783a3e20c9c52317dc4f8826d04e85a893d2136a8888"
+        },
+        "comments": {
+          "n_files": 217,
+          "raw_rows": 2553100,
+          "sha256_of_file_hashes": "3eda4c619f80521a318b8a75ad226e908e91b0b5666bf7cf94e573dc6a92fedd"
+        },
+        "lost_and_found": {
+          "n_files": 1,
+          "raw_rows": 10244,
+          "sha256_of_file_hashes": "de59e3611c92c86f9cdf1af9982b8ae098f30f98ddac2e56ea2555d8683f847e"
+        },
+        "lost_and_found_1": {
+          "n_files": 1,
+          "raw_rows": 2,
+          "sha256_of_file_hashes": "f0c0c8c0e1cceb7a41baf3bc225b023076d79008c82c3754ca3691008442984e"
+        },
+        "lost_and_found_2": {
+          "n_files": 1,
+          "raw_rows": 7,
+          "sha256_of_file_hashes": "9efa2c32d1a0804a1ecdabe4f0254cc604c37088df7b4afe8f6b707b7b65f7ea"
+        },
+        "posts": {
+          "n_files": 220,
+          "raw_rows": 3602713,
+          "sha256_of_file_hashes": "9bc735bb9927edb2051a5be0143bf4afb0011217f8b2b98f02f2d558be468e50"
+        },
+        "snapshots": {
+          "n_files": 208,
+          "raw_rows": 4665,
+          "sha256_of_file_hashes": "d7b5cc5700313ad0f660d9739873adc1d6f05c53d7fc71981efbd271f23857bd"
+        },
+        "submolts": {
+          "n_files": 24,
+          "raw_rows": 15549,
+          "sha256_of_file_hashes": "5bf90c322e371c19979b06df2bac37fa37991756b783ff3be1d065e61aea3caa"
+        },
+        "word_frequency": {
+          "n_files": 207,
+          "raw_rows": 677254,
+          "sha256_of_file_hashes": "b84238705afe4aed3c498c370d3d014fb0009ffed4b32082d0124dc7eace2360"
+        }
+      },
+      "window": {
+        "start_inclusive": "2026-01-28",
+        "end_inclusive": "2026-02-20",
+        "filter": "created_at (UTC) in [start 00:00, end+1 00:00); rows deduplicated by id keeping the latest dump_date",
+        "posts": 1500385,
+        "comments": 224210,
+        "comments_with_parent_id": 9213,
+        "agents_table_unique_ids": 182860,
+        "agent_population": 162365,
+        "active_agents_in_window": 161911,
+        "post_authors": 161532,
+        "comment_authors": 8812,
+        "submolts_with_posts": 4919,
+        "first_comment": "2026-02-02T04:39:13.110000",
+        "last_comment": "2026-02-20T23:59:57.013000"
+      }
+    }
+  },
+  "coverage": {
+    "primary_window_comments_present_in_head": 0.15470499494673323,
+    "primary_top_level_comments_with_post_in_primary": 0.16170794960282617,
+    "primary_top_level_comments_with_post_in_primary_or_head_window": 0.9816842380904905,
+    "head_window_posts": 1500385
+  },
+  "agent_population_definition": "primary: all agents in the pinned revision's agents table (earlier-run definition); head: agents first seen before 2026-02-21 plus any agent active in the window"
+}

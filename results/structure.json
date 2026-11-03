@@ -1,0 +1,366 @@
+{
+  "variant": "main",
+  "n_agents": 90704,
+  "n_agents_in_graph": 14534,
+  "n_unique_feature_rows": 9711,
+  "graph": {
+    "n_nodes": 14542,
+    "n_edges": 90574,
+    "n_interactions": 154231,
+    "n_reply_edges": 20654,
+    "n_post_comment_edges": 133577,
+    "reciprocity": 0.03179720449577141,
+    "edge_rule": "commenter -> parent-comment author (reply) or -> post author (top-level); self-loops dropped; weight = interaction count; mentions not available in the archive"
+  },
+  "features": [
+    "in_degree",
+    "out_degree",
+    "betweenness",
+    "clustering_coefficient",
+    "pagerank"
+  ],
+  "standardization": {
+    "mean": {
+      "in_degree": 0.9971666078673488,
+      "out_degree": 0.9984234432880579,
+      "betweenness": 8.361485507814023e-06,
+      "clustering_coefficient": 0.04356027645265911,
+      "pagerank": 1.0939620250719143e-05
+    },
+    "sd": {
+      "in_degree": 5.680614819007984,
+      "out_degree": 29.280567545907726,
+      "betweenness": 0.0003528371335338923,
+      "clustering_coefficient": 0.1732790570038691,
+      "pagerank": 5.830130523873997e-05
+    }
+  },
+  "k_sweep": [
+    {
+      "k": 3,
+      "silhouette": 0.9058239901845476,
+      "inertia": 238770.28142244118,
+      "largest_cluster_share": 0.9345894337625683,
+      "n_singleton_clusters": 1
+    },
+    {
+      "k": 4,
+      "silhouette": 0.9078821820898185,
+      "inertia": 166337.28681366428,
+      "largest_cluster_share": 0.9341153642617746,
+      "n_singleton_clusters": 1
+    },
+    {
+      "k": 5,
+      "silhouette": 0.908018026875111,
+      "inertia": 133205.93450357622,
+      "largest_cluster_share": 0.9340822896454402,
+      "n_singleton_clusters": 1
+    },
+    {
+      "k": 6,
+      "silhouette": 0.9132543235780848,
+      "inertia": 102244.34946687077,
+      "largest_cluster_share": 0.9382607161756924,
+      "n_singleton_clusters": 1
+    },
+    {
+      "k": 7,
+      "silhouette": 0.9147532995177753,
+      "inertia": 83361.76950089441,
+      "largest_cluster_share": 0.9280957840889046,
+      "n_singleton_clusters": 1
+    },
+    {
+      "k": 8,
+      "silhouette": 0.9157419038367467,
+      "inertia": 73343.20377740217,
+      "largest_cluster_share": 0.9287242017992591,
+      "n_singleton_clusters": 1
+    }
+  ],
+  "selected_k": 8,
+  "silhouette": 0.9157419038367467,
+  "largest_cluster_share": 0.9287242017992591,
+  "periphery_cluster": 0,
+  "periphery_share_lowest_cluster": 0.9287242017992591,
+  "periphery_share_total_degree_le_1": 0.8724973540306933,
+  "share_not_in_graph": 0.8397645087316987,
+  "clusters": [
+    {
+      "cluster": 0,
+      "count": 84239,
+      "proportion": 0.9287242017992591,
+      "interpretation": "Periphery: below-average on all five features",
+      "mean_in_degree": 0.17064542551549758,
+      "mean_out_degree": 0.32579921414071866,
+      "mean_betweenness": 7.17288733225559e-07,
+      "mean_clustering_coefficient": 0.003370367298078663,
+      "mean_pagerank": 4.640745505741045e-06,
+      "z_in_degree": -0.14549854350029456,
+      "z_out_degree": -0.022971693704118303,
+      "z_betweenness": -0.021664944100488758,
+      "z_clustering_coefficient": -0.23193748771199196,
+      "z_pagerank": -0.10804002962171473
+    },
+    {
+      "cluster": 1,
+      "count": 3958,
+      "proportion": 0.04363644381725172,
+      "interpretation": "High clustering_coefficient (clique members)",
+      "mean_in_degree": 4.720818595250126,
+      "mean_out_degree": 0.18039413845376454,
+      "mean_betweenness": 6.851510653877443e-07,
+      "mean_clustering_coefficient": 0.7924459008989966,
+      "mean_pagerank": 4.373899969493193e-05,
+      "z_in_degree": 0.655501579674618,
+      "z_out_degree": -0.027937617792132642,
+      "z_betweenness": -0.021756027676403614,
+      "z_clustering_coefficient": 4.321847298774346,
+      "z_pagerank": 0.5625839646282619
+    },
+    {
+      "cluster": 2,
+      "count": 2310,
+      "proportion": 0.025467454577526902,
+      "interpretation": "High in_degree (receivers), clustering_coefficient (clique members), pagerank (high-prestige)",
+      "mean_in_degree": 17.97748917748918,
+      "mean_out_degree": 11.604761904761904,
+      "mean_betweenness": 0.00010854581539509236,
+      "mean_clustering_coefficient": 0.222772104994058,
+      "mean_pagerank": 0.0001168490989088694,
+      "z_in_degree": 2.9891698540805365,
+      "z_out_degree": 0.36223131415894283,
+      "z_betweenness": 0.28393930333768286,
+      "z_clustering_coefficient": 1.0342382492155258,
+      "z_pagerank": 1.816588466149394
+    },
+    {
+      "cluster": 3,
+      "count": 171,
+      "proportion": 0.0018852531310636796,
+      "interpretation": "High in_degree (receivers), out_degree (broadcasters), betweenness (brokers), pagerank (high-prestige)",
+      "mean_in_degree": 75.60233918128655,
+      "mean_out_degree": 64.43859649122807,
+      "mean_betweenness": 0.0014482626403980075,
+      "mean_clustering_coefficient": 0.08428840982067916,
+      "mean_pagerank": 0.0006168748070721399,
+      "z_in_degree": 13.133291897169617,
+      "z_out_degree": 2.166630580109997,
+      "z_betweenness": 4.080922947277831,
+      "z_clustering_coefficient": 0.2350436000301562,
+      "z_pagerank": 10.393166745412586
+    },
+    {
+      "cluster": 4,
+      "count": 13,
+      "proportion": 0.00014332333744928558,
+      "interpretation": "High in_degree (receivers), betweenness (brokers), pagerank (high-prestige)",
+      "mean_in_degree": 117.3076923076923,
+      "mean_out_degree": 5.0,
+      "mean_betweenness": 0.000725237197667852,
+      "mean_clustering_coefficient": 0.11576565114301472,
+      "mean_pagerank": 0.0031264574003760865,
+      "z_in_degree": 20.474988959053636,
+      "z_out_degree": 0.13666321701032758,
+      "z_betweenness": 2.0317467863432164,
+      "z_clustering_coefficient": 0.41669995173590635,
+      "z_pagerank": 53.43821664656613
+    },
+    {
+      "cluster": 5,
+      "count": 10,
+      "proportion": 0.00011024872111483507,
+      "interpretation": "High in_degree (receivers), out_degree (broadcasters), betweenness (brokers), pagerank (high-prestige)",
+      "mean_in_degree": 55.1,
+      "mean_out_degree": 1589.7,
+      "mean_betweenness": 0.003922197346699648,
+      "mean_clustering_coefficient": 0.011737125690596126,
+      "mean_pagerank": 0.00032623363095215895,
+      "z_in_degree": 9.524115807165522,
+      "z_out_degree": 54.257881923424335,
+      "z_betweenness": 11.092471537766546,
+      "z_clustering_coefficient": -0.18365260818191323,
+      "z_pagerank": 5.40800946754677
+    },
+    {
+      "cluster": 6,
+      "count": 2,
+      "proportion": 2.2049744222967014e-05,
+      "interpretation": "High in_degree (receivers), out_degree (broadcasters), betweenness (brokers), pagerank (high-prestige)",
+      "mean_in_degree": 317.5,
+      "mean_out_degree": 1435.0,
+      "mean_betweenness": 0.02854980516783418,
+      "mean_clustering_coefficient": 0.016543687817928854,
+      "mean_pagerank": 0.0027487055472692526,
+      "z_in_degree": 55.716298935298006,
+      "z_out_degree": 48.974514387687435,
+      "z_betweenness": 80.89126956810168,
+      "z_clustering_coefficient": -0.15591375612187802,
+      "z_pagerank": 46.95891311193745
+    },
+    {
+      "cluster": 7,
+      "count": 1,
+      "proportion": 1.1024872111483507e-05,
+      "interpretation": "High in_degree (receivers), out_degree (broadcasters), betweenness (brokers), pagerank (high-prestige)",
+      "mean_in_degree": 220.0,
+      "mean_out_degree": 5744.0,
+      "mean_betweenness": 0.09114125554270083,
+      "mean_clustering_coefficient": 0.0017760679035544902,
+      "mean_pagerank": 0.003405889672795206,
+      "z_in_degree": 38.55266381718476,
+      "z_out_degree": 196.13696242576276,
+      "z_betweenness": 258.2860061933904,
+      "z_clustering_coefficient": -0.2411382498934746,
+      "z_pagerank": 58.23111572961175
+    }
+  ],
+  "bootstrap": {
+    "n": 100,
+    "kmeans_n_init": 5,
+    "silhouette": {
+      "mean": 0.9067493238566129,
+      "sd": 0.007094442667197826,
+      "ci_lower": 0.8946843196068148,
+      "ci_upper": 0.9186732559124925,
+      "min": 0.8895905509761494
+    },
+    "ari": {
+      "mean": 0.9295869902882055,
+      "sd": 0.07754798780410573,
+      "ci_lower": 0.7120142363705858,
+      "ci_upper": 0.9988794443541172,
+      "min": 0.5531293146614151
+    }
+  },
+  "gmm": {
+    "k": 8,
+    "silhouette": 0.817777512824199,
+    "bic": -4598231.318064188,
+    "aic": -4599803.682639194,
+    "ari_vs_kmeans": 0.535636943130882,
+    "mean_max_posterior": 0.9956531138351359,
+    "share_max_posterior_below_0.9": 0.012436055741753396,
+    "largest_component_share": 0.8397645087316987,
+    "bic_by_k": {
+      "3": -4202716.695917906,
+      "4": -4493595.996936161,
+      "5": -4531239.31299865,
+      "6": -4536151.900151393,
+      "7": -4536177.092550385,
+      "8": -4575756.728471023
+    },
+    "bic_selected_k": 8
+  },
+  "roles": [
+    {
+      "role": "Specialist",
+      "count": 0,
+      "proportion": 0.0,
+      "definition": "normalized_entropy < -0.5 SD"
+    },
+    {
+      "role": "Connector",
+      "count": 585,
+      "proportion": 0.0064495501852178515,
+      "definition": "betweenness > 0.5 SD"
+    },
+    {
+      "role": "Initiator",
+      "count": 8921,
+      "proportion": 0.09835288410654436,
+      "definition": "post_comment_ratio > 0.5 SD and total_posts > 0 SD (above mean)"
+    },
+    {
+      "role": "Synthesizer",
+      "count": 0,
+      "proportion": 0.0,
+      "definition": "post_comment_ratio < -0.5 SD and in_degree > 0 SD (above mean)"
+    },
+    {
+      "role": "Generalist",
+      "count": 81198,
+      "proportion": 0.8951975657082378,
+      "definition": "none of the above"
+    }
+  ],
+  "role_thresholds": {
+    "Specialist": {
+      "definition": "normalized_entropy < -0.5 SD",
+      "conditions": [
+        {
+          "feature": "normalized_entropy",
+          "operator": "<",
+          "threshold_z": -0.5,
+          "threshold_raw": -0.05251982326332112,
+          "feature_mean": 0.06028825003726747,
+          "feature_sd": 0.22561614660117718
+        }
+      ]
+    },
+    "Connector": {
+      "definition": "betweenness > 0.5 SD",
+      "conditions": [
+        {
+          "feature": "betweenness",
+          "operator": ">",
+          "threshold_z": 0.5,
+          "threshold_raw": 0.00018478005227476015,
+          "feature_mean": 8.361485507814023e-06,
+          "feature_sd": 0.0003528371335338923
+        }
+      ]
+    },
+    "Initiator": {
+      "definition": "post_comment_ratio > 0.5 SD and total_posts > 0 SD (above mean)",
+      "conditions": [
+        {
+          "feature": "post_comment_ratio",
+          "operator": ">",
+          "threshold_z": 0.5,
+          "threshold_raw": 4.237969657802055,
+          "feature_mean": 2.1049113639405332,
+          "feature_sd": 4.266116587723044
+        },
+        {
+          "feature": "total_posts",
+          "operator": ">",
+          "threshold_z": 0.0,
+          "threshold_raw": 2.444225171988005,
+          "feature_mean": 2.444225171988005,
+          "feature_sd": 5.350004734660234
+        }
+      ]
+    },
+    "Synthesizer": {
+      "definition": "post_comment_ratio < -0.5 SD and in_degree > 0 SD (above mean)",
+      "conditions": [
+        {
+          "feature": "post_comment_ratio",
+          "operator": "<",
+          "threshold_z": -0.5,
+          "threshold_raw": -0.02814692992098866,
+          "feature_mean": 2.1049113639405332,
+          "feature_sd": 4.266116587723044
+        },
+        {
+          "feature": "in_degree",
+          "operator": ">",
+          "threshold_z": 0.0,
+          "threshold_raw": 0.9971666078673488,
+          "feature_mean": 0.9971666078673488,
+          "feature_sd": 5.680614819007984
+        }
+      ]
+    },
+    "Generalist": {
+      "definition": "none of the above",
+      "conditions": []
+    }
+  },
+  "notes": {
+    "silhouette": "exact silhouette over all agents (computed on unique feature rows with multiplicity weights)",
+    "kmeans": "k-means n_init=100, seed 42, fitted on unique rows with multiplicity sample weights (same objective as the expanded data)"
+  }
+}

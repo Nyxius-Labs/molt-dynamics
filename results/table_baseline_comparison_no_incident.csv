@@ -1,0 +1,12 @@
+statistic,value
+collaborative events,164.0
+technical threads,32475.0
+events with >=1 match,87.0
+matched baseline threads,74.0
+event mean Q,0.38640528735632185
+baseline mean Q,0.1583212837837838
+baseline SD Q,0.14535061477258251
+baseline success rate,0.04054054054054054
+paired t,5.683438566538192
+paired p,1.769626752320905e-07
+Cohen's d_z,0.6093285728166145

@@ -1,0 +1,286 @@
+{
+  "variant": "no_autonomy",
+  "n_agents": 84944,
+  "n_agents_in_graph": 7718,
+  "n_unique_feature_rows": 4249,
+  "graph": {
+    "n_nodes": 7718,
+    "n_edges": 21397,
+    "n_interactions": 23039,
+    "n_reply_edges": 869,
+    "n_post_comment_edges": 22170,
+    "reciprocity": 0.032714866570079916,
+    "edge_rule": "commenter -> parent-comment author (reply) or -> post author (top-level); self-loops dropped; weight = interaction count; mentions not available in the archive"
+  },
+  "features": [
+    "in_degree",
+    "out_degree",
+    "betweenness",
+    "clustering_coefficient",
+    "pagerank"
+  ],
+  "standardization": {
+    "mean": {
+      "in_degree": 0.251895366359013,
+      "out_degree": 0.251895366359013,
+      "betweenness": 1.0537113763125047e-05,
+      "clustering_coefficient": 0.0014598044106035053,
+      "pagerank": 1.1772461857223583e-05
+    },
+    "sd": {
+      "in_degree": 2.0536262566521026,
+      "out_degree": 2.568516721016924,
+      "betweenness": 0.00024141220393999387,
+      "clustering_coefficient": 0.025248461888273784,
+      "pagerank": 7.29474100154043e-05
+    }
+  },
+  "k_sweep": [
+    {
+      "k": 3,
+      "silhouette": 0.9851935541920153,
+      "inertia": 253488.84127746185,
+      "largest_cluster_share": 0.9983871727255603,
+      "n_singleton_clusters": 0
+    },
+    {
+      "k": 4,
+      "silhouette": 0.9515677794920023,
+      "inertia": 201996.67459233158,
+      "largest_cluster_share": 0.9827180259935958,
+      "n_singleton_clusters": 0
+    },
+    {
+      "k": 5,
+      "silhouette": 0.9514475466341292,
+      "inertia": 164125.48758512488,
+      "largest_cluster_share": 0.9826827086080241,
+      "n_singleton_clusters": 0
+    },
+    {
+      "k": 6,
+      "silhouette": 0.9460954382426328,
+      "inertia": 139628.19838481874,
+      "largest_cluster_share": 0.9812817856470145,
+      "n_singleton_clusters": 0
+    },
+    {
+      "k": 7,
+      "silhouette": 0.9380954559619495,
+      "inertia": 122198.80337443584,
+      "largest_cluster_share": 0.975042380862686,
+      "n_singleton_clusters": 0
+    },
+    {
+      "k": 8,
+      "silhouette": 0.9332266955147297,
+      "inertia": 105021.47469206413,
+      "largest_cluster_share": 0.9700626294970804,
+      "n_singleton_clusters": 0
+    }
+  ],
+  "selected_k": 3,
+  "silhouette": 0.9851935541920153,
+  "largest_cluster_share": 0.9983871727255603,
+  "periphery_cluster": 0,
+  "periphery_share_lowest_cluster": 0.9983871727255603,
+  "periphery_share_total_degree_le_1": 0.9420441702768882,
+  "share_not_in_graph": 0.9091401393859484,
+  "clusters": [
+    {
+      "cluster": 0,
+      "count": 84807,
+      "proportion": 0.9983871727255603,
+      "interpretation": "Periphery: below-average on all five features",
+      "mean_in_degree": 0.20991191764830733,
+      "mean_out_degree": 0.21673918426544977,
+      "mean_betweenness": 5.60244653964331e-06,
+      "mean_clustering_coefficient": 0.0009234129269970417,
+      "mean_pagerank": 1.035864086062752e-05,
+      "z_in_degree": -0.020443568334166426,
+      "z_out_degree": -0.013687347956856676,
+      "z_betweenness": -0.020440835810886814,
+      "z_clustering_coefficient": -0.021244521190242532,
+      "z_pagerank": -0.019381373462025668
+    },
+    {
+      "cluster": 1,
+      "count": 91,
+      "proportion": 0.001071294029007346,
+      "interpretation": "High in_degree (receivers), out_degree (broadcasters), betweenness (brokers), pagerank (high-prestige)",
+      "mean_in_degree": 38.747252747252745,
+      "mean_out_degree": 32.78021978021978,
+      "mean_betweenness": 0.004613371369575252,
+      "mean_clustering_coefficient": 0.025894641990469168,
+      "mean_pagerank": 0.001277376987470052,
+      "z_in_degree": 18.745064860852672,
+      "z_out_degree": 12.664244755619965,
+      "z_betweenness": 19.066286545133487,
+      "z_clustering_coefficient": 0.9677752921342906,
+      "z_pagerank": 17.34954709626525
+    },
+    {
+      "cluster": 2,
+      "count": 46,
+      "proportion": 0.0005415332454322848,
+      "interpretation": "High clustering_coefficient (clique members), pagerank (high-prestige)",
+      "mean_in_degree": 1.5,
+      "mean_out_degree": 0.717391304347826,
+      "mean_betweenness": 2.632895130778494e-06,
+      "mean_clustering_coefficient": 0.9420289855072465,
+      "mean_pagerank": 0.0001146399711518966,
+      "z_in_degree": 0.6077564647404212,
+      "z_out_degree": 0.18123142208103457,
+      "z_betweenness": -0.032741586810214655,
+      "z_clustering_coefficient": 37.252533847753874,
+      "z_pagerank": 1.4101598572581329
+    }
+  ],
+  "bootstrap": {
+    "n": 100,
+    "kmeans_n_init": 5,
+    "silhouette": {
+      "mean": 0.9771576146927359,
+      "sd": 0.009938459328842164,
+      "ci_lower": 0.9549540899820836,
+      "ci_upper": 0.9859922737116135,
+      "min": 0.9533884664209163
+    },
+    "ari": {
+      "mean": 0.6545140669767353,
+      "sd": 0.2804885360641998,
+      "ci_lower": 0.17959775680937826,
+      "ci_upper": 0.9875411913095912,
+      "min": 0.1713098326389345
+    }
+  },
+  "gmm": {
+    "k": 3,
+    "silhouette": 0.895713322416189,
+    "bic": -4519102.067768023,
+    "aic": -4519681.7521127025,
+    "ari_vs_kmeans": 0.03007793319926829,
+    "mean_max_posterior": 0.9996919306761491,
+    "share_max_posterior_below_0.9": 0.001212563571294029,
+    "largest_component_share": 0.9091401393859484,
+    "bic_by_k": {
+      "3": -4392845.278765751,
+      "4": -4520396.493911929,
+      "5": -4533592.661853644,
+      "6": -4621234.917592118,
+      "7": -4624812.9929165095,
+      "8": -4628832.049812185
+    },
+    "bic_selected_k": 8
+  },
+  "roles": [
+    {
+      "role": "Specialist",
+      "count": 0,
+      "proportion": 0.0,
+      "definition": "normalized_entropy < -0.5 SD"
+    },
+    {
+      "role": "Connector",
+      "count": 801,
+      "proportion": 0.00942974194763609,
+      "definition": "betweenness > 0.5 SD"
+    },
+    {
+      "role": "Initiator",
+      "count": 8193,
+      "proportion": 0.0964517799962328,
+      "definition": "post_comment_ratio > 0.5 SD and total_posts > 0 SD (above mean)"
+    },
+    {
+      "role": "Synthesizer",
+      "count": 401,
+      "proportion": 0.004720757204746657,
+      "definition": "post_comment_ratio < -0.5 SD and in_degree > 0 SD (above mean)"
+    },
+    {
+      "role": "Generalist",
+      "count": 75549,
+      "proportion": 0.8893977208513845,
+      "definition": "none of the above"
+    }
+  ],
+  "role_thresholds": {
+    "Specialist": {
+      "definition": "normalized_entropy < -0.5 SD",
+      "conditions": [
+        {
+          "feature": "normalized_entropy",
+          "operator": "<",
+          "threshold_z": -0.5,
+          "threshold_raw": -0.0535843337935496,
+          "feature_mean": 0.05786719421286102,
+          "feature_sd": 0.22290305601282123
+        }
+      ]
+    },
+    "Connector": {
+      "definition": "betweenness > 0.5 SD",
+      "conditions": [
+        {
+          "feature": "betweenness",
+          "operator": ">",
+          "threshold_z": 0.5,
+          "threshold_raw": 0.00013124321573312198,
+          "feature_mean": 1.0537113763125047e-05,
+          "feature_sd": 0.00024141220393999387
+        }
+      ]
+    },
+    "Initiator": {
+      "definition": "post_comment_ratio > 0.5 SD and total_posts > 0 SD (above mean)",
+      "conditions": [
+        {
+          "feature": "post_comment_ratio",
+          "operator": ">",
+          "threshold_z": 0.5,
+          "threshold_raw": 3.0296679517256973,
+          "feature_mean": 1.6321444337337567,
+          "feature_sd": 2.7950470359838806
+        },
+        {
+          "feature": "total_posts",
+          "operator": ">",
+          "threshold_z": 0.0,
+          "threshold_raw": 1.8472758523262385,
+          "feature_mean": 1.8472758523262385,
+          "feature_sd": 3.621361635689357
+        }
+      ]
+    },
+    "Synthesizer": {
+      "definition": "post_comment_ratio < -0.5 SD and in_degree > 0 SD (above mean)",
+      "conditions": [
+        {
+          "feature": "post_comment_ratio",
+          "operator": "<",
+          "threshold_z": -0.5,
+          "threshold_raw": 0.23462091574181643,
+          "feature_mean": 1.6321444337337567,
+          "feature_sd": 2.7950470359838806
+        },
+        {
+          "feature": "in_degree",
+          "operator": ">",
+          "threshold_z": 0.0,
+          "threshold_raw": 0.251895366359013,
+          "feature_mean": 0.251895366359013,
+          "feature_sd": 2.0536262566521026
+        }
+      ]
+    },
+    "Generalist": {
+      "definition": "none of the above",
+      "conditions": []
+    }
+  },
+  "notes": {
+    "silhouette": "exact silhouette over all agents (computed on unique feature rows with multiplicity weights)",
+    "kmeans": "k-means n_init=100, seed 42, fitted on unique rows with multiplicity sample weights (same objective as the expanded data)"
+  }
+}

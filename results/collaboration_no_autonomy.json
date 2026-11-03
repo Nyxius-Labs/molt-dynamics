@@ -1,0 +1,428 @@
+{
+  "variant": "no_autonomy",
+  "n_threads_with_comments": 10122,
+  "n_technical_threads": 32827,
+  "technical_thread_definition": "post whose title+body contains a technical keyword (rq3 extract_technical_threads)",
+  "n_events": 81,
+  "event_rules": {
+    "min_agents": 3,
+    "min_comments": 5,
+    "min_duration_minutes": 30,
+    "keyword_match": "case-insensitive substring of any TECHNICAL_KEYWORDS in title+post+comments"
+  },
+  "n_single_agent_technical_threads": 145,
+  "q_definitions": {
+    "Q_code": {
+      "weights": {
+        "has_code": 0.3,
+        "has_comments": 0.2,
+        "has_tests": 0.3,
+        "brackets_balanced": 0.2
+      },
+      "applied_to": "solution comment (last comment containing a backtick, else last comment)",
+      "notes": "as implemented in rq3 SolutionAssessor.assess_code_solution; '//' matches URLs, syntax is bracket balance"
+    },
+    "Q_spec": {
+      "weights": {
+        "code_presence": 0.3,
+        "comment_quality": 0.3,
+        "test_inclusion": 0.2,
+        "syntax_validity": 0.2
+      },
+      "applied_to": "same solution comment",
+      "comment_quality": "mean of (VADER compound + 1)/2 and min(1, words/50)",
+      "syntax_validity": "1 if the solution has fenced code blocks (else inline code spans) and every one parses with ast.parse",
+      "notes": "paper Methods weights; the comment-quality operationalisation is defined here and needs author sign-off"
+    }
+  },
+  "primary_q": "Q_spec",
+  "success_threshold": 0.5,
+  "earlier_run_test_Q_spec": {
+    "test": "one-sample t-test of event Q against the constant 0.5 (rq3 compare_quality_distributions)",
+    "n": 81,
+    "mean": 0.36458250000000003,
+    "sd": 0.20066958969636192,
+    "t": -6.073453889272069,
+    "p": 3.99606559720579e-08,
+    "cohens_d": -0.6748282099191188,
+    "success_rate_ge_0.5": 0.18518518518518517,
+    "success_rate_gt_0.5_code": 0.18518518518518517
+  },
+  "earlier_run_test_Q_code": {
+    "test": "one-sample t-test of event Q against the constant 0.5 (rq3 compare_quality_distributions)",
+    "n": 81,
+    "mean": 0.3395061728395062,
+    "sd": 0.18952507244800026,
+    "t": -7.621389749584475,
+    "p": 4.4435089438403585e-11,
+    "cohens_d": -0.846821083287164,
+    "success_rate_ge_0.5": 0.35802469135802467,
+    "success_rate_gt_0.5_code": 0.07407407407407407
+  },
+  "comparison_type_in_code": "neither paired nor two-sample: a one-sample t-test against the constant 0.5; collect_individual_baselines() returns an empty DataFrame, so no baseline threads were ever used",
+  "n_low_participation_technical_threads": 210,
+  "n_nonevent_technical_threads_with_comments": 2719,
+  "primary_baseline": "matched_low_participation",
+  "baseline_Q_spec": {
+    "paper_baseline_single_agent": {
+      "match": "single-agent technical threads, same submolt, comments +-2, up to 5 (paper Methods)",
+      "n_events": 81,
+      "n_events_matched": 51,
+      "n_unique_baseline_threads": 10,
+      "mean_matches_per_event": 3.9411764705882355,
+      "event_mean_Q": 0.3607142647058823,
+      "event_sd_Q": 0.19825337651052383,
+      "baseline_mean_Q": 0.27209074999999994,
+      "baseline_sd_Q": 0.19309211220889283,
+      "baseline_success_rate": 0.1,
+      "event_success_rate": 0.19607843137254902,
+      "paired": {
+        "test": "paired t-test on event Q minus mean Q of its matches",
+        "mean_difference": 0.030012114379085,
+        "sd_difference": 0.22385641988840496,
+        "t": 0.9574412336904295,
+        "df": 50,
+        "p": 0.34295137486135446,
+        "cohens_dz": 0.1340685891163916
+      },
+      "two_sample": {
+        "test": "Welch t-test, matched events vs unique matched baseline threads",
+        "t": 1.3212489478169804,
+        "p": 0.2091931234695459,
+        "cohens_d_pooled": 0.4487839546388404
+      },
+      "available": true,
+      "feasibility": "estimable"
+    },
+    "matched_low_participation": {
+      "match": "technical non-event threads with 1-2 participants, same submolt, comments +-2, up to 5",
+      "n_events": 81,
+      "n_events_matched": 57,
+      "n_unique_baseline_threads": 54,
+      "mean_matches_per_event": 4.280701754385965,
+      "event_mean_Q": 0.3593863596491228,
+      "event_sd_Q": 0.19868879996320685,
+      "baseline_mean_Q": 0.2827236111111111,
+      "baseline_sd_Q": 0.15625389502667217,
+      "baseline_success_rate": 0.07407407407407407,
+      "event_success_rate": 0.19298245614035087,
+      "paired": {
+        "test": "paired t-test on event Q minus mean Q of its matches",
+        "mean_difference": 0.033582460526315784,
+        "sd_difference": 0.22182953128333857,
+        "t": 1.1429588091175078,
+        "df": 56,
+        "p": 0.2579186093692242,
+        "cohens_dz": 0.1513885925468668
+      },
+      "two_sample": {
+        "test": "Welch t-test, matched events vs unique matched baseline threads",
+        "t": 2.2658707776632108,
+        "p": 0.025501242990165363,
+        "cohens_d_pooled": 0.4275333798060695
+      },
+      "available": true
+    },
+    "rematch_difficulty": {
+      "match": "technical non-event threads with 1-2 participants, same submolt, comments +-2, keyword count +-1, up to 5",
+      "n_events": 81,
+      "n_events_matched": 31,
+      "n_unique_baseline_threads": 40,
+      "mean_matches_per_event": 4.193548387096774,
+      "event_mean_Q": 0.35022395161290326,
+      "event_sd_Q": 0.19786973224802704,
+      "baseline_mean_Q": 0.28606525,
+      "baseline_sd_Q": 0.15791754179021436,
+      "baseline_success_rate": 0.05,
+      "event_success_rate": 0.1935483870967742,
+      "paired": {
+        "test": "paired t-test on event Q minus mean Q of its matches",
+        "mean_difference": 0.05461093951612903,
+        "sd_difference": 0.21313998339369417,
+        "t": 1.4265781483943043,
+        "df": 30,
+        "p": 0.1640265304818034,
+        "cohens_dz": 0.25622099920715635
+      },
+      "two_sample": {
+        "test": "Welch t-test, matched events vs unique matched baseline threads",
+        "t": 1.4771859694891663,
+        "p": 0.14519190350113823,
+        "cohens_d_pooled": 0.36370445269423834
+      },
+      "available": true
+    },
+    "rematch_participants_and_difficulty": {
+      "match": "technical non-event threads, same submolt, comments +-2, keyword count +-1, participants +-1, up to 5",
+      "n_events": 81,
+      "n_events_matched": 70,
+      "n_unique_baseline_threads": 295,
+      "mean_matches_per_event": 4.6571428571428575,
+      "event_mean_Q": 0.36335460714285706,
+      "event_sd_Q": 0.2027069805719056,
+      "baseline_mean_Q": 0.36577856779661017,
+      "baseline_sd_Q": 0.20905796975996144,
+      "baseline_success_rate": 0.23728813559322035,
+      "event_success_rate": 0.18571428571428572,
+      "paired": {
+        "test": "paired t-test on event Q minus mean Q of its matches",
+        "mean_difference": -0.013674415476190466,
+        "sd_difference": 0.22818166149941221,
+        "t": -0.5013915991306321,
+        "df": 69,
+        "p": 0.6176915222330205,
+        "cohens_dz": -0.05992775837608532
+      },
+      "two_sample": {
+        "test": "Welch t-test, matched events vs unique matched baseline threads",
+        "t": -0.08939970649520008,
+        "p": 0.9289319579515284,
+        "cohens_d_pooled": -0.011661186632977279
+      },
+      "available": true
+    }
+  },
+  "baseline_Q_code": {
+    "paper_baseline_single_agent": {
+      "match": "single-agent technical threads, same submolt, comments +-2, up to 5 (paper Methods)",
+      "n_events": 81,
+      "n_events_matched": 51,
+      "n_unique_baseline_threads": 10,
+      "mean_matches_per_event": 3.9411764705882355,
+      "event_mean_Q": 0.3372549019607843,
+      "event_sd_Q": 0.19386674218516747,
+      "baseline_mean_Q": 0.27,
+      "baseline_sd_Q": 0.18885620632287056,
+      "baseline_success_rate": 0.1,
+      "event_success_rate": 0.35294117647058826,
+      "paired": {
+        "test": "paired t-test on event Q minus mean Q of its matches",
+        "mean_difference": 0.06470588235294117,
+        "sd_difference": 0.20654639131368496,
+        "t": 2.2372331212868146,
+        "df": 50,
+        "p": 0.02975892905424458,
+        "cohens_dz": 0.3132752983065747
+      },
+      "two_sample": {
+        "test": "Welch t-test, matched events vs unique matched baseline threads",
+        "t": 1.0251969096938398,
+        "p": 0.3239645523113125,
+        "cohens_d_pooled": 0.3482710068441924
+      },
+      "available": true,
+      "feasibility": "estimable"
+    },
+    "matched_low_participation": {
+      "match": "technical non-event threads with 1-2 participants, same submolt, comments +-2, up to 5",
+      "n_events": 81,
+      "n_events_matched": 57,
+      "n_unique_baseline_threads": 54,
+      "mean_matches_per_event": 4.280701754385965,
+      "event_mean_Q": 0.3385964912280702,
+      "event_sd_Q": 0.19798483524620938,
+      "baseline_mean_Q": 0.27962962962962956,
+      "baseline_sd_Q": 0.17087966595705908,
+      "baseline_success_rate": 0.16666666666666666,
+      "event_success_rate": 0.3508771929824561,
+      "paired": {
+        "test": "paired t-test on event Q minus mean Q of its matches",
+        "mean_difference": 0.007894736842105286,
+        "sd_difference": 0.24627271596051076,
+        "t": 0.2420241959628386,
+        "df": 56,
+        "p": 0.8096455508905597,
+        "cohens_dz": 0.03205688787454307
+      },
+      "two_sample": {
+        "test": "Welch t-test, matched events vs unique matched baseline threads",
+        "t": 1.6824190313383667,
+        "p": 0.09537450102569787,
+        "cohens_d_pooled": 0.3182217769717201
+      },
+      "available": true
+    },
+    "rematch_difficulty": {
+      "match": "technical non-event threads with 1-2 participants, same submolt, comments +-2, keyword count +-1, up to 5",
+      "n_events": 81,
+      "n_events_matched": 31,
+      "n_unique_baseline_threads": 40,
+      "mean_matches_per_event": 4.193548387096774,
+      "event_mean_Q": 0.33870967741935465,
+      "event_sd_Q": 0.20441366450548046,
+      "baseline_mean_Q": 0.2875,
+      "baseline_sd_Q": 0.181429508808977,
+      "baseline_success_rate": 0.2,
+      "event_success_rate": 0.3225806451612903,
+      "paired": {
+        "test": "paired t-test on event Q minus mean Q of its matches",
+        "mean_difference": 0.047365591397849474,
+        "sd_difference": 0.21109931583724614,
+        "t": 1.2492719399083148,
+        "df": 30,
+        "p": 0.22122538911326037,
+        "cohens_dz": 0.22437586408080787
+      },
+      "two_sample": {
+        "test": "Welch t-test, matched events vs unique matched baseline threads",
+        "t": 1.0991078693027179,
+        "p": 0.27607749480374866,
+        "cohens_d_pooled": 0.2670489125397177
+      },
+      "available": true
+    },
+    "rematch_participants_and_difficulty": {
+      "match": "technical non-event threads, same submolt, comments +-2, keyword count +-1, participants +-1, up to 5",
+      "n_events": 81,
+      "n_events_matched": 70,
+      "n_unique_baseline_threads": 295,
+      "mean_matches_per_event": 4.6571428571428575,
+      "event_mean_Q": 0.33714285714285713,
+      "event_sd_Q": 0.19573083304939765,
+      "baseline_mean_Q": 0.30338983050847457,
+      "baseline_sd_Q": 0.16409523294252326,
+      "baseline_success_rate": 0.3152542372881356,
+      "event_success_rate": 0.34285714285714286,
+      "paired": {
+        "test": "paired t-test on event Q minus mean Q of its matches",
+        "mean_difference": 0.0262857142857143,
+        "sd_difference": 0.19963859686487995,
+        "t": 1.1016009307377417,
+        "df": 69,
+        "p": 0.27446309734420504,
+        "cohens_dz": 0.13166649484871448
+      },
+      "two_sample": {
+        "test": "Welch t-test, matched events vs unique matched baseline threads",
+        "t": 1.3356959735068443,
+        "p": 0.18489698441054098,
+        "cohens_d_pooled": 0.19789429708266038
+      },
+      "available": true
+    }
+  },
+  "dose_response": {
+    "Q_spec": {
+      "events": {
+        "slope": 0.015346387481713788,
+        "se_hc3": 0.03530682569249223,
+        "p": 0.6638108275955783,
+        "intercept": 0.3342110614639786,
+        "r2": 0.0010863487608524514,
+        "n": 81
+      },
+      "all_technical_threads_ge5_comments": {
+        "slope": 0.09182628872498359,
+        "se_hc3": 0.018122175598893016,
+        "p": 4.039908547590716e-07,
+        "r2": 0.02670538884224971,
+        "n": 1053
+      }
+    },
+    "Q_code": {
+      "events": {
+        "slope": 0.007680528182022299,
+        "se_hc3": 0.053746342045147305,
+        "p": 0.8863665737431226,
+        "intercept": 0.3243059382642732,
+        "r2": 0.0003050485121287583,
+        "n": 81
+      },
+      "all_technical_threads_ge5_comments": {
+        "slope": 0.0521255756386327,
+        "se_hc3": 0.01416515089840686,
+        "p": 0.00023337473243627619,
+        "r2": 0.014138579975911059,
+        "n": 1053
+      }
+    }
+  },
+  "n_successful_Q_spec": 15,
+  "n_successful_Q_code": 29,
+  "components": [
+    {
+      "q": "Q_spec",
+      "component": "code_presence",
+      "weight": 0.3,
+      "successful_mean": 1.0,
+      "unsuccessful_mean": 0.0,
+      "all_events_mean": 0.18518518518518517
+    },
+    {
+      "q": "Q_spec",
+      "component": "comment_quality",
+      "weight": 0.3,
+      "successful_mean": 0.853875,
+      "unsuccessful_mean": 0.7974113636363637,
+      "all_events_mean": 0.8078675925925928
+    },
+    {
+      "q": "Q_spec",
+      "component": "test_inclusion",
+      "weight": 0.2,
+      "successful_mean": 0.26666666666666666,
+      "unsuccessful_mean": 0.21212121212121213,
+      "all_events_mean": 0.2222222222222222
+    },
+    {
+      "q": "Q_spec",
+      "component": "syntax_validity",
+      "weight": 0.2,
+      "successful_mean": 0.6,
+      "unsuccessful_mean": 0.0,
+      "all_events_mean": 0.1111111111111111
+    },
+    {
+      "q": "Q_code",
+      "component": "has_code",
+      "weight": 0.3,
+      "successful_mean": 0.5172413793103449,
+      "unsuccessful_mean": 0.0,
+      "all_events_mean": 0.18518518518518517
+    },
+    {
+      "q": "Q_code",
+      "component": "has_comments",
+      "weight": 0.2,
+      "successful_mean": 0.13793103448275862,
+      "unsuccessful_mean": 0.07692307692307693,
+      "all_events_mean": 0.09876543209876543
+    },
+    {
+      "q": "Q_code",
+      "component": "has_tests",
+      "weight": 0.3,
+      "successful_mean": 0.6206896551724138,
+      "unsuccessful_mean": 0.0,
+      "all_events_mean": 0.2222222222222222
+    },
+    {
+      "q": "Q_code",
+      "component": "brackets_balanced",
+      "weight": 0.2,
+      "successful_mean": 0.9655172413793104,
+      "unsuccessful_mean": 1.0,
+      "all_events_mean": 0.9876543209876543
+    }
+  ],
+  "thread_feature_differences": [
+    {
+      "group": "events",
+      "n": 81,
+      "mean_comments": 9.061728395061728,
+      "mean_keyword_count": 5.691358024691358,
+      "mean_text_chars": 6455.074074074074,
+      "mean_participants": 8.320987654320987,
+      "mean_duration_minutes": 116.3958964020576
+    },
+    {
+      "group": "low_participation_baseline_matched",
+      "n": 54,
+      "mean_comments": 3.962962962962963,
+      "mean_keyword_count": 2.7777777777777777,
+      "mean_text_chars": 3090.4814814814813,
+      "mean_participants": 1.8333333333333333,
+      "mean_duration_minutes": 14.578997426234569
+    }
+  ]
+}

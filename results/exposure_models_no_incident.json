@@ -1,0 +1,346 @@
+{
+  "variant": "no_incident",
+  "graph_nodes": 14517,
+  "graph_edges": 90544,
+  "binned_adoption": [
+    {
+      "exposure_bin": "0",
+      "n_agent_cascade_pairs": 5501597694,
+      "n_adopted": 7239048,
+      "adoption_rate": 0.0013158083165359128,
+      "wilson_lower": 0.0013148507781211118,
+      "wilson_upper": 0.0013167665513574278
+    },
+    {
+      "exposure_bin": "1",
+      "n_agent_cascade_pairs": 573644147,
+      "n_adopted": 1825806,
+      "adoption_rate": 0.0031828198885118235,
+      "wilson_lower": 0.003178213854649044,
+      "wilson_upper": 0.0031874325763350275
+    },
+    {
+      "exposure_bin": "2",
+      "n_agent_cascade_pairs": 119740728,
+      "n_adopted": 752325,
+      "adoption_rate": 0.006282949941643916,
+      "wilson_lower": 0.006268813039147939,
+      "wilson_upper": 0.0062971185224783765
+    },
+    {
+      "exposure_bin": "3",
+      "n_agent_cascade_pairs": 35385905,
+      "n_adopted": 381765,
+      "adoption_rate": 0.01078861767135813,
+      "wilson_lower": 0.010754633025568255,
+      "wilson_upper": 0.010822708533743328
+    },
+    {
+      "exposure_bin": "4",
+      "n_agent_cascade_pairs": 13166299,
+      "n_adopted": 220900,
+      "adoption_rate": 0.016777683690762303,
+      "wilson_lower": 0.01670844872954646,
+      "wilson_upper": 0.016847200626143817
+    },
+    {
+      "exposure_bin": "5",
+      "n_agent_cascade_pairs": 5798850,
+      "n_adopted": 136945,
+      "adoption_rate": 0.023615889357372584,
+      "wilson_lower": 0.023492612776575418,
+      "wilson_upper": 0.02373979710080771
+    },
+    {
+      "exposure_bin": "6",
+      "n_agent_cascade_pairs": 2902695,
+      "n_adopted": 90575,
+      "adoption_rate": 0.031203760643126473,
+      "wilson_lower": 0.031004363144071054,
+      "wilson_upper": 0.0314043989608456
+    },
+    {
+      "exposure_bin": "7",
+      "n_agent_cascade_pairs": 1603748,
+      "n_adopted": 62943,
+      "adoption_rate": 0.03924743787677366,
+      "wilson_lower": 0.038948007338878494,
+      "wilson_upper": 0.03954907569131621
+    },
+    {
+      "exposure_bin": "8",
+      "n_agent_cascade_pairs": 953712,
+      "n_adopted": 45430,
+      "adoption_rate": 0.047634925428221515,
+      "wilson_lower": 0.04720927615285122,
+      "wilson_upper": 0.0480642188536213
+    },
+    {
+      "exposure_bin": "9",
+      "n_agent_cascade_pairs": 598460,
+      "n_adopted": 33065,
+      "adoption_rate": 0.05525014203121345,
+      "wilson_lower": 0.05467415549165954,
+      "wilson_upper": 0.05583183814968103
+    },
+    {
+      "exposure_bin": "10",
+      "n_agent_cascade_pairs": 393399,
+      "n_adopted": 24860,
+      "adoption_rate": 0.06319283983945054,
+      "wilson_lower": 0.06243678722705777,
+      "wilson_upper": 0.06395742302936593
+    },
+    {
+      "exposure_bin": "11",
+      "n_agent_cascade_pairs": 268565,
+      "n_adopted": 19080,
+      "adoption_rate": 0.07104425371883902,
+      "wilson_lower": 0.07007878160570673,
+      "wilson_upper": 0.07202199691916288
+    },
+    {
+      "exposure_bin": "12",
+      "n_agent_cascade_pairs": 188101,
+      "n_adopted": 14996,
+      "adoption_rate": 0.07972312746875349,
+      "wilson_lower": 0.07850762920697342,
+      "wilson_upper": 0.08095579143755731
+    },
+    {
+      "exposure_bin": "13",
+      "n_agent_cascade_pairs": 135971,
+      "n_adopted": 12058,
+      "adoption_rate": 0.08868067455560377,
+      "wilson_lower": 0.08718123578829481,
+      "wilson_upper": 0.0902033538905633
+    },
+    {
+      "exposure_bin": "14",
+      "n_agent_cascade_pairs": 100225,
+      "n_adopted": 9253,
+      "adoption_rate": 0.09232227488151659,
+      "wilson_lower": 0.09054569636382696,
+      "wilson_upper": 0.09413010343004292
+    },
+    {
+      "exposure_bin": "15",
+      "n_agent_cascade_pairs": 75214,
+      "n_adopted": 7454,
+      "adoption_rate": 0.09910389023320126,
+      "wilson_lower": 0.0969889099197243,
+      "wilson_upper": 0.10125981896708426
+    },
+    {
+      "exposure_bin": "16",
+      "n_agent_cascade_pairs": 57035,
+      "n_adopted": 6049,
+      "adoption_rate": 0.10605768387832033,
+      "wilson_lower": 0.10355717293649144,
+      "wilson_upper": 0.10861125737003297
+    },
+    {
+      "exposure_bin": "17",
+      "n_agent_cascade_pairs": 44003,
+      "n_adopted": 4882,
+      "adoption_rate": 0.11094698088766675,
+      "wilson_lower": 0.10804641156017916,
+      "wilson_upper": 0.11391547288819531
+    },
+    {
+      "exposure_bin": "18",
+      "n_agent_cascade_pairs": 34625,
+      "n_adopted": 4131,
+      "adoption_rate": 0.11930685920577618,
+      "wilson_lower": 0.11593474582776271,
+      "wilson_upper": 0.1227634349545808
+    },
+    {
+      "exposure_bin": "19",
+      "n_agent_cascade_pairs": 27357,
+      "n_adopted": 3455,
+      "adoption_rate": 0.12629308769236394,
+      "wilson_lower": 0.12240919776543847,
+      "wilson_upper": 0.13028191442956982
+    },
+    {
+      "exposure_bin": "20",
+      "n_agent_cascade_pairs": 22106,
+      "n_adopted": 3024,
+      "adoption_rate": 0.13679544015199493,
+      "wilson_lower": 0.13232862943651938,
+      "wilson_upper": 0.14138846030798083
+    },
+    {
+      "exposure_bin": "21-30",
+      "n_agent_cascade_pairs": 88532,
+      "n_adopted": 13399,
+      "adoption_rate": 0.15134640581936476,
+      "wilson_lower": 0.14900079034678199,
+      "wilson_upper": 0.1537222765739365
+    },
+    {
+      "exposure_bin": "31-50",
+      "n_agent_cascade_pairs": 24325,
+      "n_adopted": 4898,
+      "adoption_rate": 0.20135662898252826,
+      "wilson_lower": 0.19636453514224228,
+      "wilson_upper": 0.2064430327975641
+    },
+    {
+      "exposure_bin": "51-100",
+      "n_agent_cascade_pairs": 4088,
+      "n_adopted": 1086,
+      "adoption_rate": 0.2656555772994129,
+      "wilson_lower": 0.2523406698544689,
+      "wilson_upper": 0.27941049419180164
+    },
+    {
+      "exposure_bin": "101+",
+      "n_agent_cascade_pairs": 250,
+      "n_adopted": 85,
+      "adoption_rate": 0.34,
+      "wilson_lower": 0.2840965884370376,
+      "wilson_upper": 0.4007460674015046
+    }
+  ],
+  "logistic": {
+    "primary_uncapped_n2to5": {
+      "coefficients": {
+        "intercept": {
+          "coef": -6.561759774923771,
+          "se_cluster_cascade": 0.0033392381058144687,
+          "z": -1965.0469858672452,
+          "p": 0.0,
+          "se_model_based": 0.00033885898401699336,
+          "ci95_cluster": [
+            -6.568304681611167,
+            -6.555214868236375
+          ]
+        },
+        "exposure": {
+          "coef": 0.6435344237244119,
+          "se_cluster_cascade": 0.00260249856698072,
+          "z": 247.27561117200008,
+          "p": 0.0,
+          "se_model_based": 0.00030193447768897335,
+          "ci95_cluster": [
+            0.6384335265331297,
+            0.6486353209156942
+          ]
+        },
+        "exposure_squared": {
+          "coef": -0.0196752087451024,
+          "se_cluster_cascade": 0.0002782850303244757,
+          "z": -70.70164256468065,
+          "p": 0.0,
+          "se_model_based": 2.343520596193866e-05,
+          "ci95_cluster": [
+            -0.020220647404538373,
+            -0.019129770085666426
+          ]
+        }
+      },
+      "n_observations": 6256856034,
+      "n_adopted": 10917512,
+      "n_clusters_cascades": 431002,
+      "log_likelihood": -77681750.1301102,
+      "mcfadden_pseudo_r2": 0.031952568949186744,
+      "iterations": 7,
+      "curvature": "concave (saturating)",
+      "vertex_exposure": 16.353941451437006,
+      "max_exposure_observed": 286,
+      "n_cascades": 431002
+    }
+  },
+  "cox": {
+    "random100_static_pooled_clustered": {
+      "model": "static exposure, pooled, SE clustered by cascade",
+      "coef": -3.6109236973141248,
+      "se": 1.1425955576989342,
+      "hazard_ratio": 0.027026870685049484,
+      "hr_ci95": [
+        0.0028788342551346233,
+        0.2537317797033886
+      ],
+      "z": -3.1602815825628983,
+      "p": 0.001576167311009529,
+      "n_rows": 178739,
+      "n_events": 2675,
+      "n_cascades": 99,
+      "concordance": 0.7855892000795259,
+      "schoenfeld_test": {
+        "time_transform": "rank",
+        "statistic": 1.2757678715995526,
+        "p": 0.25868741344686996
+      },
+      "se_type": "robust, clustered by cascade",
+      "strata": "unstratified"
+    },
+    "random100_static_stratified": {
+      "model": "static exposure, stratified by cascade",
+      "coef": -3.1595904249937368,
+      "se": 0.05191124240440993,
+      "hazard_ratio": 0.04244312116266083,
+      "hr_ci95": [
+        0.03833719939847642,
+        0.04698878797338281
+      ],
+      "z": -60.86524380170345,
+      "p": 0.0,
+      "n_rows": 178739,
+      "n_events": 2675,
+      "n_cascades": 99,
+      "concordance": 0.740850736940148,
+      "schoenfeld_test": {
+        "time_transform": "rank",
+        "statistic": 802.2999964770336,
+        "p": 1.7060878121152358e-176
+      },
+      "se_type": "model-based",
+      "strata": "cascade"
+    },
+    "random100_timevarying_pooled": {
+      "model": "time-varying cumulative exposure, pooled",
+      "coef": 0.33562114713229424,
+      "se": 0.005538333841978811,
+      "hazard_ratio": 1.3988089816190197,
+      "hr_ci95": [
+        1.3837071144148627,
+        1.4140756715596328
+      ],
+      "z": 60.599659881170865,
+      "p": 0.0,
+      "n_rows": 26412,
+      "n_subject_weight": 1693569,
+      "n_events": 2675,
+      "n_cascades": 100,
+      "se_type": "model-based (frequency weights for collapsed never-exposed rows)",
+      "newton_step_size": 0.2,
+      "penalizer": 0.0,
+      "strata": "unstratified",
+      "frailty": "not fitted: no shared-frailty Cox implementation in lifelines/statsmodels; stratification by cascade used instead"
+    },
+    "random100_timevarying_stratified": {
+      "model": "time-varying cumulative exposure, stratified by cascade",
+      "coef": 0.28980164094087096,
+      "se": 0.007950046382855383,
+      "hazard_ratio": 1.3361624218163641,
+      "hr_ci95": [
+        1.3155039660501529,
+        1.3571452945403788
+      ],
+      "z": 36.45282391884413,
+      "p": 6.2059890830610765e-291,
+      "n_rows": 26412,
+      "n_subject_weight": 1693569,
+      "n_events": 2675,
+      "n_cascades": 100,
+      "se_type": "model-based (frequency weights for collapsed never-exposed rows)",
+      "newton_step_size": 0.2,
+      "penalizer": 0.0,
+      "strata": "cascade",
+      "frailty": "not fitted: no shared-frailty Cox implementation in lifelines/statsmodels; stratification by cascade used instead"
+    }
+  }
+}

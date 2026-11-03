@@ -1,0 +1,245 @@
+{
+  "variant": "main",
+  "primary_set": "primary_uncapped_n2to5",
+  "reproduction_set": "reproduction_capped_n3to5",
+  "fits": {
+    "reproduction_capped_n3to5": {
+      "n": 10292,
+      "alpha": 2.570520040326724,
+      "alpha_se": 0.015696569662754022,
+      "alpha_ci95": [
+        2.539754763787726,
+        2.601285316865722
+      ],
+      "xmin": 94.0,
+      "ks_D": 0.02027588798296953,
+      "n_tail": 10011,
+      "tail_share": 0.972697240575204,
+      "max": 48725.0,
+      "median": 143.0,
+      "vs_exponential": {
+        "normalized_llr": 10.592116345790359,
+        "p": 3.2417843972131275e-26,
+        "favors": "power_law"
+      },
+      "vs_lognormal": {
+        "normalized_llr": 2.72957440525806,
+        "p": 0.00634161365944274,
+        "favors": "power_law"
+      },
+      "vs_truncated_power_law": {
+        "normalized_llr": 0.40143535108596445,
+        "p": 0.40109978566728444,
+        "favors": "neither"
+      },
+      "lognormal_params": {
+        "mu": -888.1005954127589,
+        "sigma": 23.857881815161832
+      },
+      "truncated_power_law_params": {
+        "alpha": 2.5837860328611555,
+        "lambda": 4.4994390158148434e-18
+      },
+      "goodness_of_fit": {
+        "gof_p": 0.0,
+        "gof_iters": 200,
+        "tail_sampler": "continuous power law rounded to integers (Clauset et al. 2009, App. D approximation)"
+      }
+    },
+    "uncapped_n3to5": {
+      "n": 281814,
+      "alpha": 2.440348816081667,
+      "alpha_se": 0.0027140040365939803,
+      "alpha_ci95": [
+        2.4350293681699426,
+        2.445668263993391
+      ],
+      "xmin": 10.0,
+      "ks_D": 0.004361561522809143,
+      "n_tail": 281653,
+      "tail_share": 0.9994287012000823,
+      "max": 48725.0,
+      "median": 15.0,
+      "vs_exponential": {
+        "normalized_llr": 26.62244458850877,
+        "p": 3.7323743854446553e-156,
+        "favors": "power_law"
+      },
+      "vs_lognormal": {
+        "normalized_llr": -2.860464225756017,
+        "p": 0.004230212767759076,
+        "favors": "lognormal"
+      },
+      "vs_truncated_power_law": {
+        "normalized_llr": -0.7228844276149797,
+        "p": 0.17297801462567275,
+        "favors": "neither"
+      },
+      "lognormal_params": {
+        "mu": -66.93306320324342,
+        "sigma": 6.993351881611073
+      },
+      "truncated_power_law_params": {
+        "alpha": 2.4438781942397707,
+        "lambda": 1.8817037147060998e-09
+      }
+    },
+    "capped_n2to5": {
+      "n": 10292,
+      "alpha": 2.681522347448655,
+      "alpha_se": 0.023314036364660114,
+      "alpha_ci95": [
+        2.635826836173921,
+        2.727217858723389
+      ],
+      "xmin": 235.0,
+      "ks_D": 0.013246145043643964,
+      "n_tail": 5202,
+      "tail_share": 0.5054411193159736,
+      "max": 48725.0,
+      "median": 236.0,
+      "vs_exponential": {
+        "normalized_llr": 9.379080552749603,
+        "p": 6.6550520062909e-21,
+        "favors": "power_law"
+      },
+      "vs_lognormal": {
+        "normalized_llr": 2.676243775882701,
+        "p": 0.007445246962576648,
+        "favors": "power_law"
+      },
+      "vs_truncated_power_law": {
+        "normalized_llr": 0.0013105051228070486,
+        "p": 0.9981776576060388,
+        "favors": "neither"
+      },
+      "lognormal_params": {
+        "mu": -829.326088783519,
+        "sigma": 22.29794629241602
+      },
+      "truncated_power_law_params": {
+        "alpha": 2.6814782259867305,
+        "lambda": 1.4430336894073322e-13
+      }
+    },
+    "primary_uncapped_n2to5": {
+      "n": 471608,
+      "alpha": 2.3029289824452555,
+      "alpha_se": 0.0018975984040111849,
+      "alpha_ci95": [
+        2.2992096895733933,
+        2.3066482753171176
+      ],
+      "xmin": 10.0,
+      "ks_D": 0.006903138604362091,
+      "n_tail": 471447,
+      "tail_share": 0.9996586147817679,
+      "max": 48725.0,
+      "median": 16.0,
+      "vs_exponential": {
+        "normalized_llr": 41.05588916078615,
+        "p": 0.0,
+        "favors": "power_law"
+      },
+      "vs_lognormal": {
+        "normalized_llr": -15.366567476009598,
+        "p": 2.7432281096885394e-53,
+        "favors": "lognormal"
+      },
+      "vs_truncated_power_law": {
+        "normalized_llr": -4.455286981560842,
+        "p": 0.0,
+        "favors": "truncated_power_law"
+      },
+      "lognormal_params": {
+        "mu": -12.731610645554806,
+        "sigma": 3.5517034302722115
+      },
+      "truncated_power_law_params": {
+        "alpha": 2.2807988993123907,
+        "lambda": 0.00027876175667416916
+      }
+    },
+    "meme_only_uncapped_n2to5": {
+      "n": 471316,
+      "alpha": 2.3029970952172767,
+      "alpha_se": 0.0018979613137199186,
+      "alpha_ci95": [
+        2.2992770910423856,
+        2.3067170993921677
+      ],
+      "xmin": 10.0,
+      "ks_D": 0.006916466290673995,
+      "n_tail": 471316,
+      "tail_share": 1.0,
+      "max": 48725.0,
+      "median": 16.0,
+      "vs_exponential": {
+        "normalized_llr": 41.06569104816478,
+        "p": 0.0,
+        "favors": "power_law"
+      },
+      "vs_lognormal": {
+        "normalized_llr": -15.451001920735978,
+        "p": 7.427979277076268e-54,
+        "favors": "lognormal"
+      },
+      "vs_truncated_power_law": {
+        "normalized_llr": -4.472473710295126,
+        "p": 0.0,
+        "favors": "truncated_power_law"
+      },
+      "lognormal_params": {
+        "mu": -12.65231391377753,
+        "sigma": 3.5430094799642147
+      },
+      "truncated_power_law_params": {
+        "alpha": 2.2804242426472685,
+        "lambda": 0.0002846737258612257
+      }
+    },
+    "embedding": {
+      "n": 253,
+      "alpha": 2.2114017217854234,
+      "alpha_se": 0.07902313508659073,
+      "alpha_ci95": [
+        2.0565163770157056,
+        2.366287066555141
+      ],
+      "xmin": 11.0,
+      "ks_D": 0.046384081611523076,
+      "n_tail": 235,
+      "tail_share": 0.9288537549407114,
+      "max": 47885.0,
+      "median": 17.0,
+      "vs_exponential": {
+        "normalized_llr": 3.276154843495573,
+        "p": 0.00105230849619595,
+        "favors": "power_law"
+      },
+      "vs_lognormal": {
+        "normalized_llr": -0.998861322084997,
+        "p": 0.3178618750392119,
+        "favors": "neither"
+      },
+      "vs_truncated_power_law": {
+        "normalized_llr": -0.010278967878229642,
+        "p": 0.9809250050500123,
+        "favors": "neither"
+      },
+      "lognormal_params": {
+        "mu": -1158.4857632329752,
+        "sigma": 31.033749377120937
+      },
+      "truncated_power_law_params": {
+        "alpha": 2.2132546551033845,
+        "lambda": 1.8267456133029794e-11
+      },
+      "goodness_of_fit": {
+        "gof_p": 0.115,
+        "gof_iters": 200,
+        "tail_sampler": "continuous power law rounded to integers (Clauset et al. 2009, App. D approximation)"
+      }
+    }
+  }
+}

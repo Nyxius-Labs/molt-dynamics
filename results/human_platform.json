@@ -1,0 +1,185 @@
+{
+  "dataset": {
+    "repo": "HuggingFaceGECLM/REDDIT_comments",
+    "revision": "54779d3d1f1c1b12e5989f695e13d38b394a558f",
+    "subreddit": "programming",
+    "window_start": "2021-09-19T00:00:00",
+    "window_end_exclusive": "2023-02-01T00:00:00",
+    "n_days": 500,
+    "n_comments": 499116,
+    "n_authors": 73601,
+    "selection": "most recent whole days until distinct authors >= 73543 (active MoltBook agents)",
+    "edges": "comment author -> parent comment author; top-level comments give no edge (submission authors unavailable)"
+  },
+  "graph": {
+    "n_nodes": 59243,
+    "n_edges": 305889,
+    "n_interactions": 375137,
+    "reciprocity": 0.41808629927849644
+  },
+  "structure": {
+    "k_sweep": [
+      {
+        "k": 3,
+        "silhouette": 0.9352414525777095,
+        "largest_cluster_share": 0.9940082335837829
+      },
+      {
+        "k": 4,
+        "silhouette": 0.8976795279678571,
+        "largest_cluster_share": 0.9776089998777191
+      },
+      {
+        "k": 5,
+        "silhouette": 0.885249657367718,
+        "largest_cluster_share": 0.9619026915395171
+      },
+      {
+        "k": 6,
+        "silhouette": 0.816032865247405,
+        "largest_cluster_share": 0.9367264031738699
+      },
+      {
+        "k": 7,
+        "silhouette": 0.7166346046930908,
+        "largest_cluster_share": 0.8086167307509409
+      },
+      {
+        "k": 8,
+        "silhouette": 0.7689993127638507,
+        "largest_cluster_share": 0.8526514585399655
+      }
+    ],
+    "selected_k": 3,
+    "silhouette": 0.9352414525777095,
+    "largest_cluster_share": 0.9940082335837829,
+    "periphery_share_lowest_cluster": 0.9940082335837829,
+    "periphery_share_total_degree_le_1": 0.42040189671335987,
+    "share_not_in_graph": 0.195078871210989
+  },
+  "cascades": {
+    "counts_by_n": {
+      "2": {
+        ">=2": 910460,
+        ">=5": 297439,
+        ">=10": 142770,
+        "occurrence_pairs": 10422029
+      },
+      "3": {
+        ">=2": 2089833,
+        ">=5": 438830,
+        ">=10": 173871,
+        "occurrence_pairs": 20571751
+      },
+      "4": {
+        ">=2": 1873042,
+        ">=5": 234835,
+        ">=10": 78689,
+        "occurrence_pairs": 23265297
+      },
+      "5": {
+        ">=2": 1211611,
+        ">=5": 70830,
+        ">=10": 19565,
+        "occurrence_pairs": 22676606
+      }
+    },
+    "n_cascades_n2to5": 414895,
+    "n_cascades_n3to5": 272125
+  },
+  "powerlaw_n2to5": {
+    "n": 414895,
+    "alpha": 2.241387242397377,
+    "alpha_se": 0.0019272505458112984,
+    "alpha_ci95": [
+      2.2376098313275867,
+      2.245164653467167
+    ],
+    "xmin": 10.0,
+    "ks_D": 0.009098028592041674,
+    "n_tail": 414895,
+    "tail_share": 1.0,
+    "max": 5031.0,
+    "median": 17.0,
+    "vs_exponential": {
+      "normalized_llr": 95.02665411623471,
+      "p": 0.0,
+      "favors": "power_law"
+    },
+    "vs_lognormal": {
+      "normalized_llr": -19.407844099753515,
+      "p": 6.624900485194325e-84,
+      "favors": "lognormal"
+    },
+    "vs_truncated_power_law": {
+      "normalized_llr": -23.24674503960972,
+      "p": 0.0,
+      "favors": "truncated_power_law"
+    },
+    "lognormal_params": {
+      "mu": -9.39462915466411,
+      "sigma": 3.2562562180950123
+    },
+    "truncated_power_law_params": {
+      "alpha": 2.1814183233431095,
+      "lambda": 0.0007372021067409072
+    }
+  },
+  "powerlaw_n3to5": {
+    "n": 272125,
+    "alpha": 2.34474065594331,
+    "alpha_se": 0.002577830241191219,
+    "alpha_ci95": [
+      2.3396881086705754,
+      2.349793203216045
+    ],
+    "xmin": 10.0,
+    "ks_D": 0.006488645788607639,
+    "n_tail": 272125,
+    "tail_share": 1.0,
+    "max": 4581.0,
+    "median": 16.0,
+    "vs_exponential": {
+      "normalized_llr": 70.67773757536129,
+      "p": 0.0,
+      "favors": "power_law"
+    },
+    "vs_lognormal": {
+      "normalized_llr": -11.659779413569046,
+      "p": 2.045716831487739e-31,
+      "favors": "lognormal"
+    },
+    "vs_truncated_power_law": {
+      "normalized_llr": -14.16265371280595,
+      "p": 0.0,
+      "favors": "truncated_power_law"
+    },
+    "lognormal_params": {
+      "mu": -13.049711900726559,
+      "sigma": 3.524928985759523
+    },
+    "truncated_power_law_params": {
+      "alpha": 2.2967080481034614,
+      "lambda": 0.0007013819081130172
+    }
+  },
+  "comparison": {
+    "moltbook_main": {
+      "silhouette": 0.9157419038367467,
+      "selected_k": 8,
+      "periphery_share_lowest_cluster": 0.9287242017992591,
+      "periphery_share_total_degree_le_1": 0.8724973540306933,
+      "alpha_primary_n2to5": 2.3029289824452555,
+      "alpha_uncapped_n3to5": 2.440348816081667
+    },
+    "reddit_programming": {
+      "silhouette": 0.9352414525777095,
+      "selected_k": 3,
+      "periphery_share_lowest_cluster": 0.9940082335837829,
+      "periphery_share_total_degree_le_1": 0.42040189671335987,
+      "alpha_n2to5": 2.241387242397377,
+      "alpha_n3to5": 2.34474065594331
+    },
+    "caveat": "the Reddit window spans 500 days (the dataset samples r/programming sparsely) against MoltBook's 24, so the platforms are matched on population size, not duration; MoltBook edges include comments on posts while Reddit edges are comment replies only; the MoltBook population includes inactive agents from the agents table while the Reddit population is active commenters"
+  }
+}

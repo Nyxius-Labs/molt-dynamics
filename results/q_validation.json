@@ -1,0 +1,51 @@
+{
+  "sample": {
+    "n_events": 164,
+    "n_sampled": 100,
+    "stratified_by": "Q_spec quintile (rank-based)",
+    "per_stratum": {
+      "0": 20,
+      "1": 20,
+      "2": 20,
+      "3": 20,
+      "4": 20
+    },
+    "blinded": true,
+    "rating_sheet": "results/q_validation_sample.csv",
+    "key": "results/q_validation_key.csv",
+    "n_rated": 0
+  },
+  "weight_sensitivity": {
+    "Q_spec": {
+      "n_weight_vectors": 20,
+      "distribution": "Dirichlet(1,1,1,1), i.e. uniform on the simplex",
+      "spearman_min": 0.6334708613388509,
+      "spearman_median": 0.9419824981669735,
+      "spearman_mean": 0.9293618890988311,
+      "kendall_median": 0.9015718562874251,
+      "success_flip_share_median": 0.0701219512195122,
+      "success_flip_share_max": 0.6158536585365854,
+      "success_rate_range": [
+        0.17073170731707318,
+        0.7682926829268293
+      ],
+      "original_success_rate": 0.23780487804878048
+    },
+    "Q_code": {
+      "n_weight_vectors": 20,
+      "distribution": "Dirichlet(1,1,1,1), i.e. uniform on the simplex",
+      "spearman_min": 0.9036926680733178,
+      "spearman_median": 0.9531343784015471,
+      "spearman_mean": 0.9551872959554555,
+      "kendall_median": 0.8833408458148381,
+      "success_flip_share_median": 0.1951219512195122,
+      "success_flip_share_max": 0.5975609756097561,
+      "success_rate_range": [
+        0.06707317073170732,
+        0.9878048780487805
+      ],
+      "original_success_rate": 0.4024390243902439
+    }
+  },
+  "q_spec_vs_q_code_spearman": 0.8053546470250383
+}
