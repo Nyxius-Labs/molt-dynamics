@@ -89,7 +89,7 @@ def fig1_clusters():
     cb = fig.colorbar(im, ax=b, fraction=0.04, pad=0.02)
     cb.set_label("Mean z-score (clipped at 10)", color=INK2)
     cb.outline.set_linewidth(0.4)
-    b.set_title("(b) Standardized feature means", loc="left", color=INK)
+    b.set_title("(b) Average standardized features", loc="left", color=INK)
     fig.tight_layout()
     save(fig, "fig1_clusters")
 
@@ -99,20 +99,20 @@ def fig2_ccdf():
     fits = json.load(open(RES / "results.json"))["fig2_ccdf"]["fits"]
     fig, axes = plt.subplots(1, 2, figsize=(6.6, 2.7), sharey=True)
     panels = [
-        ("primary_uncapped_n2to5", "(a) All cascades, uncapped ($n$=2..5)"),
-        ("reproduction_capped_n3to5", "(b) 10,000-cascade cap ($n$=3..5)"),
+        ("primary_uncapped_n2to5", "(a) All cascades"),
+        ("reproduction_capped_n3to5", "(b) 10,000 largest cascades"),
     ]
     for ax, (s, title) in zip(axes, panels):
         x = d[d.set == s].sort_values("x")
         ax.plot(x.x, x.empirical_ccdf, "o", ms=2.2, mfc="none", mec=MUTED, mew=0.6,
-                label="Empirical", zorder=2)
+                label="Observed", zorder=2)
         tail = x.dropna(subset=["fit_power_law"])
         f = fits[s]
         ax.plot(tail.x, tail.fit_power_law, color=BLUE, lw=1.6,
                 label=f"Power law ($\\alpha$={f['alpha']:.2f})", zorder=3)
         ax.plot(tail.x, tail.fit_lognormal, color=ORANGE, lw=1.6, ls="--", label="Lognormal", zorder=3)
         ax.plot(tail.x, tail.fit_truncated_power_law, color=AQUA, lw=1.6, ls=":",
-                label="Truncated power law", zorder=3)
+                label="Power law with cutoff", zorder=3)
         ax.axvline(f["xmin"], color=MUTED, lw=0.6, ls="-", zorder=1)
         ax.text(f["xmin"] * 1.1, 2e-6, f"$x_{{\\min}}$={f['xmin']:.0f}", fontsize=7, color=INK2)
         ax.set_xscale("log")
@@ -138,19 +138,19 @@ def fig3_exposure():
     fig, (a, c) = plt.subplots(1, 2, figsize=(6.6, 2.7), gridspec_kw={"width_ratios": [1.35, 1]})
     a.errorbar(b.e, b.adoption_rate * 100,
                yerr=[(b.adoption_rate - b.wilson_lower) * 100, (b.wilson_upper - b.adoption_rate) * 100],
-               fmt="o", ms=3.5, color=BLUE, ecolor=BLUE, elinewidth=0.8, label="Observed (95% Wilson)", zorder=3)
+               fmt="o", ms=3.5, color=BLUE, ecolor=BLUE, elinewidth=0.8, label="Observed (95% interval)", zorder=3)
     a.plot(lc.exposure, lc.logistic_predicted_rate * 100, color=ORANGE, lw=1.6, ls="--",
-           label="Quadratic logistic fit", zorder=2)
-    a.set_xlabel("Adopting in-neighbors (static count)")
+           label="Logistic fit", zorder=2)
+    a.set_xlabel("Neighbors who used the phrase")
     a.set_ylabel("Adoption rate (%)")
-    a.set_title("(a) Adoption by exposure", loc="left", color=INK)
+    a.set_title("(a) Adoption rate", loc="left", color=INK)
     a.legend(loc="upper left")
 
     rows = [
-        ("random100_static_pooled_clustered", "Static, pooled"),
-        ("random100_static_stratified", "Static, stratified"),
-        ("random100_timevarying_pooled", "Time-varying, pooled"),
-        ("random100_timevarying_stratified", "Time-varying, stratified"),
+        ("random100_static_pooled_clustered", "Whole window, shared baseline"),
+        ("random100_static_stratified", "Whole window, per-cascade baseline"),
+        ("random100_timevarying_pooled", "Over time, shared baseline"),
+        ("random100_timevarying_stratified", "Over time, per-cascade baseline"),
     ]
     for i, (k, lab) in enumerate(rows):
         r = cox[k]
@@ -167,9 +167,9 @@ def fig3_exposure():
     c.set_yticks(range(len(rows)), [r[1] for r in rows])
     c.invert_yaxis()
     c.set_ylim(3.6, -0.7)
-    c.set_xlabel("Hazard ratio per exposure (log)")
+    c.set_xlabel("Hazard ratio (log scale)")
     c.grid(axis="y", visible=False)
-    c.set_title("(b) Cox models, 100 random cascades", loc="left", color=INK)
+    c.set_title("(b) Hazard ratio per neighbor", loc="left", color=INK)
     fig.tight_layout()
     save(fig, "fig3_exposure")
 
@@ -179,8 +179,8 @@ def fig4_participants():
     dr = json.load(open(RES / "results.json"))["fig4_participants"]["dose_response"]
     rng = np.random.default_rng(42)
     fig, axes = plt.subplots(1, 2, figsize=(6.6, 2.6), sharey=True)
-    for ax, (q, col, title) in zip(axes, [("Q_spec", BLUE, "(a) $Q_{\\mathrm{spec}}$"),
-                                          ("Q_code", ORANGE, "(b) $Q_{\\mathrm{code}}$")]):
+    for ax, (q, col, title) in zip(axes, [("Q_spec", BLUE, "(a) Main score"),
+                                          ("Q_code", ORANGE, "(b) Alternative score")]):
         jit = np.exp(rng.uniform(-0.06, 0.06, len(d)))
         ax.scatter(d.participants * jit, d[q], s=10, color=col, alpha=0.55, edgecolor="white", linewidth=0.4)
         e = dr[q]["events"]

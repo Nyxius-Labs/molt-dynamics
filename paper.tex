@@ -9,12 +9,13 @@
 \usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{nicefrac}
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{xcolor}
 \usepackage{natbib}
 
+\newcommand{\qmain}{Q_{\text{main}}}
+\newcommand{\qalt}{Q_{\text{alt}}}
 
 \title{Structure, Diffusion, and Collaboration in a Large Population of LLM Agents: A Re-analysis of MoltBook}
 
@@ -29,261 +30,235 @@
 \maketitle
 
 \begin{abstract}
-Whether large populations of autonomous language model agents self-organize into a division of labor, spread information the way human crowds do, or cooperate more effectively than they work alone is largely unknown, because nearly all existing evidence comes from groups of fewer than a dozen agents with assigned roles. We study these questions observationally in the MoltBook Observatory Archive, which records 222,791 posts and 879,629 comments written by 73,543 active agents over 24 days. The network of replies is dominated by an inactive mass, since 84.0\% of registered agents never interact and the largest of eight k-means clusters holds 92.9\% of the population, so the high silhouette of 0.916 and the bootstrap ARI of 0.930 measure the distance between that mass and a small active core and not a set of separated functional roles. Among 471,608 phrase, code, and formatting cascades, sizes are heavy-tailed with a power-law exponent of 2.30 above ten adopters, but a lognormal and a truncated power law both fit better than a pure power law, and when exposure is counted as it accumulates over time each additional adopting neighbor is associated with a 14\% higher adoption hazard (HR 1.14, 95\% CI 1.13 to 1.15), whereas the static exposure count used in an earlier version of this analysis produces a hazard ratio below one through an asymmetry in how adopters and non-adopters are counted. Of 43,123 technical threads, 164 meet our definition of a collaborative event, and under the specified quality score these threads score higher than matched threads with one or two participants (paired $d_z = 0.61$), but the gap shrinks to $d_z = 0.23$ when participation and topic density are matched, disappears under the alternative score implemented in the original code, and loses significance once agents flagged as likely scripted are removed. We read the evidence as favoring a stratified population with reinforcing but not demonstrably saturating diffusion, and we read the collaboration result as more consistent with longer threads having more chances to contain code than with a benefit of coordination, although our design cannot separate task selection from measurement.
+MoltBook is a Reddit-style site on which only AI agents can post. We use 24 days of its public archive, covering about 74,000 active agents, to ask three questions that small, lab-built groups of language model agents cannot answer: whether agents settle into distinct roles, whether phrases spread from agent to agent, and whether agents write better technical answers when several of them work on a problem together. Most agents do very little, since in every version of the data we use more than 80\% of registered accounts have at most one reply link to another agent, so the population splits into a large inactive group and a small active one, and we find no other clear roles. Agents are more likely to start using a phrase the more of their neighbors have already used it, and the rate keeps rising without leveling off, although our data cannot tell influence apart from neighbors simply being alike or reading the same posts. Threads in which several agents work on a technical problem score higher on our code quality measure than threads with one or two agents, but the gap shrinks when we compare threads of similar length, and it disappears under a second quality measure and when we drop scripted accounts, so we find no consistent evidence that agents do better work together. We also found that three results in an earlier version of this analysis came from errors in the analysis code, and we describe them so that others who work with this archive can avoid them.
 \end{abstract}
 
 \section{Introduction}
 
-A growing share of the text on open platforms is now written by language model agents that post, reply, and vote on behalf of their operators, and for the first time there exist communities in which tens of thousands of such agents interact with one another and with almost no human mediation. What happens inside these populations is an open empirical question, because the multi-agent literature built around language models has studied groups of two to ten agents with assigned roles and explicit task decompositions \citep{wu2023autogen, hong2023metagpt, li2023camel}, or simulated towns whose design fixes the rules of interaction in advance \citep{park2023generative}, and neither setting can say whether the regularities documented in large human populations reappear when the individuals are language models acting asynchronously under prompts of their own.
+Language model agents now post, reply, and vote on open platforms on behalf of their operators, and on some sites tens of thousands of them interact with each other with almost no human involvement. We know little about what happens in these populations. Most studies of language model agents put two to ten agents together, give them roles, and split a task among them \citep{wu2023autogen, hong2023metagpt, li2023camel}, or build a simulated town whose rules are fixed in advance \citep{park2023generative}. Those designs are good for testing what a particular setup can do, but they cannot tell us whether the patterns we know from large human populations also appear when thousands of agents act on their own schedules and under their own prompts.
 
-We take up this question in the MoltBook Observatory Archive \citep{moltbook_observatory_archive_2026}, a public record of agents running on the OpenClaw framework \citep{steinberger2026openclaw} on a Reddit-style platform that only agents can use, and we organize the analysis around three questions: whether agents differentiate into functional positions or merely split into an inactive periphery and an active core \citep{guimera2005functional, borgatti2000coreperiphery}, whether repeated exposure to a phrase makes adoption more, equally, or less likely \citep{centola2007complex, dodds2004universal}, and whether technical threads in which several agents work together end up better or worse than comparable single-agent threads \citep{woolley2010evidence, hong2004diverse, straub2023coordination}.
+MoltBook gives us a chance to look. It is a Reddit-style site that only agents can use, most of them running on the OpenClaw agent software \citep{steinberger2026openclaw}, and its public archive records their posts and comments \citep{moltbook_observatory_archive_2026}. We use 24 days of that archive to ask three questions, each of which has a long history in the study of human groups. The first is whether agents take on distinct roles in the reply network or simply split into an active group and an inactive one \citep{borgatti2000coreperiphery, guimera2005functional}. The second is whether an agent becomes more likely to use a phrase as more of its neighbors use it \citep{centola2007complex, dodds2004universal}. The third is whether technical threads in which several agents take part end up with better answers than similar threads with fewer agents \citep{woolley2010evidence, straub2023coordination}.
 
-On structure, we find that 87.2\% of the 90,704 registered agents have at most one interaction in the window, that k-means places 92.9\% of them in a single low-activity cluster, and that the remaining clusters differ mostly in how active their members are, with one clique-like group of 4.4\% as the only position that stands out on a feature other than volume. On diffusion, the 471,608 cascades with at least ten adopters have a heavy-tailed size distribution that is better described by a lognormal than by a pure power law, the binned adoption rate rises from 0.13\% among agents with no adopting neighbor to 11.6\% among agents with eighteen, and in a time-varying Cox model each additional adopting neighbor is associated with a hazard ratio of 1.14. On collaboration, the 164 collaborative events reach a mean quality of 0.386 against 0.158 for matched threads with one or two participants, which is a paired difference of 0.13 ($d_z = 0.61$), but that difference falls to 0.05 ($d_z = 0.23$) when we also match on participants and keyword density, and the 164 events are much longer than their matches, at 10.9 comments and 7,519 characters on average against 3.9 comments and 950 characters.
+Our answers are mostly no, or not clearly. The reply network has one large group of agents who barely interact and a small group who do almost all the interacting, and inside that small group the only thing that separates agents is how active they are (Section~\ref{sec:roles}). Phrases do spread, in the sense that an agent's chance of using a phrase rises steadily with the number of neighbors who have used it, from 0.13\% with no such neighbor to about 10\% with fifteen (Section~\ref{sec:diffusion}). Threads with several agents score higher on our quality measure than threads with one or two, but the difference mostly reflects the fact that these threads are longer and contain more code, and it does not hold up under a second measure or without scripted accounts (Section~\ref{sec:collab}).
 
-What the paper establishes is a set of descriptive regularities in the largest agent-only population we know of, together with a re-analysis that shows which of the regularities reported in an earlier version of this analysis came from the analysis pipeline and not from the agents, since the reported 10,000 cascades were a hard cap in the code, the hazard ratio below one came from a static and asymmetric exposure count, and the reported negative effect of collaboration came from comparing quality to the constant 0.5 because no baseline threads were ever collected. What it does not establish is any causal effect of exposure or of collaboration, and on the collaboration result in particular we report the rematching, the alternative quality score, the dose response across all technical threads, the autonomy audit, and a merged-data sensitivity run because those are the analyses that bear on whether the gap reflects coordination, the selection of harder or richer tasks into collaborative threads, or the way the quality score is measured.
+This paper replaces an earlier version of the same analysis, and three of that version's main results came from the analysis code and not from the agents. It reported 10,000 cascades because the code kept only the 10,000 largest. It reported that each additional exposure lowered the chance of adoption because of a counting rule that treated agents who adopted and agents who did not adopt differently. And it reported that collaboration hurt quality because it compared quality scores with the fixed number 0.5, since the step that was supposed to collect comparison threads returned none. Appendix~\ref{app:changes} lists every change.
 
-\section{Related Work and Hypotheses}
+Two limits apply to everything that follows. The data are observational, so when we say that agents with more adopting neighbors adopt more often, we mean that the two go together, not that one causes the other. Neighbors may use the same phrase because they resemble each other or read the same posts, and with data like ours these explanations cannot be separated from influence \citep{shalizi2011homophily, aral2009distinguishing}. The second limit is that a small number of accounts write most of the content, and many of them look scripted, so we report every main result with and without those accounts (Section~\ref{sec:checks}).
+
+\section{Related Work}
 \label{sec:related}
 
-\paragraph{LLM-based multi-agent systems.}
-Work on coordination among language model agents has concentrated on small and carefully configured groups. \citet{park2023generative} populate a virtual town with generative agents whose interaction routines emerge from memory and reflection, \citet{li2023camel} study role-playing pairs that cooperate on tasks, AutoGen \citep{wu2023autogen} and MetaGPT \citep{hong2023metagpt} give a handful of agents explicit communication protocols and responsibilities, and debate frameworks \citep{liang2023encouraging, du2023improving} test whether structured disagreement improves reasoning. In all of these the experimenter controls the number of agents, their roles, and the form of their communication, which buys causal clarity at the price of leaving open how agents behave when none of those things is fixed and the population is several orders of magnitude larger.
+\paragraph{Groups of language model agents.}
+Work on cooperation among language model agents has focused on small groups set up by the experimenter. \citet{park2023generative} place generative agents in a virtual town, \citet{li2023camel} study pairs of agents playing assigned roles, AutoGen \citep{wu2023autogen} and MetaGPT \citep{hong2023metagpt} give a few agents fixed ways to talk and fixed jobs, and debate setups \citep{liang2023encouraging, du2023improving} test whether structured disagreement improves answers. In each case the experimenter decides how many agents there are, what they do, and how they communicate. That control makes cause and effect easy to read, but it leaves open how agents behave when none of these things is set in advance.
 
-\paragraph{Emergent coordination and collective intelligence.}
-That agents can develop shared conventions through repeated interaction is well established in the emergent communication literature \citep{lazaridou2020emergent, mordatch2018emergence}, and in human groups \citet{woolley2010evidence} find a collective intelligence factor that predicts performance across tasks, while work on open collaboration in settings such as Wikipedia documents the emergence of specialized roles without central assignment \citep{kittur2007harnessing}. The same literature is clear that group performance is not automatic: diverse contributors can outperform individually stronger ones \citep{hong2004diverse}, yet coordination has costs that can exceed the benefits of collaboration on complex tasks \citep{straub2023coordination}, so whether a given group helps depends on how much non-redundant information its members contribute relative to the effort of integrating it.
+\paragraph{Earlier studies of MoltBook.}
+Three studies have described MoltBook's first days. \citet{holtz2026anatomy} analyzes the first 3.5 days and finds network patterns that resemble human platforms, alongside shallow conversations, little reciprocity, and many duplicated template messages. \citet{li2026rise} study about 122,000 posts from the first five days and find a mostly neutral tone and a network centered on a few hub accounts. \citet{price2026claws} cover 12 days and find concentrated attention, about 1\% reciprocity, and early accounts gaining more upvotes, and they argue that hierarchy and role differentiation can emerge quickly. We cover a longer window and more agents, we test for roles directly, and we add the questions of diffusion and collaboration.
 
-\paragraph{Network structure and information propagation.}
-Centrality, core-periphery organization, and brokerage positions are classical determinants of who influences whom and how quickly information travels \citep{freeman1977centrality, borgatti2000coreperiphery, guimera2005functional}. On the dynamic side, simple contagion spreads through single exposures while complex contagion requires reinforcement from multiple sources \citep{centola2007complex}, and a further family of models predicts that adoption rises with early exposures but at a diminishing rate \citep{dodds2004universal}. Heavy-tailed popularity is a recurring signature of attention-limited diffusion \citep{weng2012competition}, and fitting such tails credibly requires the maximum likelihood and goodness-of-fit machinery of \citet{clauset2009power} and not log-log regression.
+\paragraph{Roles and teamwork in human groups.}
+Shared conventions can form through repeated interaction among agents \citep{lazaridou2020emergent, mordatch2018emergence}, and open projects such as Wikipedia develop specialized roles that nobody assigns \citep{kittur2007harnessing}. In human groups, \citet{woolley2010evidence} find a general factor that predicts how well a group performs across tasks, and diverse groups can outperform groups of individually stronger members \citep{hong2004diverse}. Working together also has costs, and on complex tasks these costs can exceed the benefits \citep{straub2023coordination}.
 
-\paragraph{Hypotheses.}
-These literatures give us three expectations to test. The stratification hypothesis holds that an unconstrained population of LLM agents organizes primarily along a single activity axis, so that cluster quality will be high because core and periphery are well separated while the number of functionally distinct roles inside the active minority will be small. The saturation hypothesis holds that adoption probability increases with early exposures at a diminishing rate, which would show up as a negative quadratic exposure term and as a non-increasing instantaneous hazard, and it stands against the accelerating exposure response of complex contagion. The coordination-cost hypothesis holds that multi-agent threads on technical problems will do worse than matched single-agent threads, but that the deficit should shrink as participation grows beyond a critical mass, since coordination overhead is largely fixed while the supply of complementary contributions increases with the number of contributors.
+\paragraph{How things spread through networks.}
+Who sits at the center of a network, and who links otherwise separate groups, shapes how information travels \citep{freeman1977centrality, borgatti2000coreperiphery, guimera2005functional}. In simple contagion one contact is enough to pass something on, while in complex contagion people need to see it from several contacts \citep{centola2007complex}, and in other models adoption rises with each exposure but by less each time \citep{dodds2004universal}. Most cascades online are small \citep{goel2012structure}, and the few large ones produce the heavy tails seen in popularity data \citep{weng2012competition}, which should be tested with the maximum likelihood methods of \citet{clauset2009power}. Telling influence apart from similarity is hard in observational data. Matching methods show that simple estimates can overstate influence several times over \citep{aral2009distinguishing}, shuffling the order of adoptions offers a test for whether timing matters at all \citep{anagnostopoulos2008influence}, and in general the two cannot be separated without strong assumptions \citep{shalizi2011homophily}. Experiments avoid the problem by assigning exposure at random \citep{centola2010spread, bakshy2012role}. Automated accounts are a further concern on any platform, and studies of human platforms check whether their results hold when such accounts are removed \citep{vosoughi2018spread}.
 
-\section{Data and Setting}
+\paragraph{What we expected.}
+From this work we expected three things. We expected the network to be organized mainly by how active agents are, so that a clustering method would separate active from inactive agents clearly but find few other roles. We expected adoption to rise with the first few exposures and then level off. And we expected threads with several agents to do worse than comparable threads with fewer agents, since agents have to spend effort coordinating, with the gap shrinking as more agents join and contribute.
+
+\section{Data}
 \label{sec:data}
 
-\subsection{The MoltBook Observatory Archive}
+The MoltBook Observatory Archive \citep{moltbook_observatory_archive_2026} publishes daily exports of agent profiles, posts, comments, and communities (called submolts). We use archive revision \texttt{ee98f6c8}, the one our earlier version used, and keep content created between 28 January and 20 February 2026. Table~\ref{tab:data} gives the main counts. The archive does not record which language model runs each agent, so every result describes the population as a whole.
 
-MoltBook is a Reddit-style platform on which only AI agents can post, comment, and vote, and the Observatory Archive \citep{moltbook_observatory_archive_2026} provides daily incremental exports of agent profiles, posts, comments, communities (submolts), and interaction metrics. We use archive revision \texttt{ee98f6c8} and restrict every table to content created from 28 January 2026 to 20 February 2026 (UTC), and Table~\ref{tab:dataset_summary} lists the quantities on which the analyses are built. We use this pinned revision as primary because it is the one our earlier version used, but it has a coverage problem that shapes the network, since only 16.2\% of its top-level comments point to a post that is present in the same revision, so most top-level comments produce no edge. The current archive head back-fills the missing posts but keeps only 15.5\% of the pinned revision's window comments, so we report a merged variant, the union of both revisions deduplicated by identifier, as a sensitivity check in which 98.2\% of top-level comments find their post. The agents act through the OpenClaw framework \citep{steinberger2026openclaw}, the archive does not record which model drives which agent, and every result is therefore a statement about the aggregate population.
+This revision has a gap that matters for the network. Only 16.2\% of its top-level comments point to a post that is also in the revision, so most top-level comments cannot be linked to the agent they reply to. The latest archive revision fills in those posts but has lost most of the comments, keeping only 15.5\% of ours. We therefore also build a merged dataset from both revisions, in which 98.2\% of top-level comments find their post, and we repeat the network and collaboration analyses on it. The phrase analysis was too large to repeat on the merged data.
 
-Because an agent on MoltBook can be a scheduled script or can be steered by its operator, we audited activity with three heuristic rules, flagging an agent when it posts on a fixed daily cadence (at least 30 events over at least two days with a daily gap of at least six hours in the same hours of the day), when at least half of at least five items are verbatim copies of its own earlier text, or when its inter-event times are strongly bursty (burstiness coefficient $B \geq 0.5$ over at least ten events). The rules flag 5,766 of the 73,542 agents active in the window, which is 7.8\% of agents but 76.8\% of all items and 88.7\% of all comments, and almost all of that volume comes from the self-duplication rule, which catches heavy comment spammers. We rerun the structural, diffusion, and collaboration analyses with all activity by flagged agents removed, and we treat these heuristics as an audit without ground truth and not as a classifier of human versus autonomous agents. We also rerun the same analyses with every item created from 30 January to 1 February removed, the period around the 31 January incident on the platform.
+Some accounts on MoltBook behave like scripts. We flag an account if it posts at nearly the same times every day (at least 30 posts or comments over at least two days, with a gap of six or more hours that recurs daily), if at least half of its posts or comments repeat its own earlier text word for word, or if its activity comes in strong bursts (burstiness of 0.5 or more over at least ten items). These rules flag 5,766 of the 73,542 active accounts. That is only 7.8\% of accounts, but they wrote 76.8\% of all posts and comments and 88.7\% of comments, and almost all of them were flagged for repeating their own text. We call these scripted accounts. The rules are heuristics, not a classifier with known accuracy, so we use them only to ask whether a result changes when these accounts are removed. We also repeat each analysis without content from 30 January to 1 February, the days around an incident on the platform on 31 January.
 
 \begin{table}[H]
 \centering
-\caption{Summary of the archive snapshot (revision \texttt{ee98f6c8}, 28 January to 20 February 2026) and of the objects extracted from it. Cascades are counted with $n \in \{2,\ldots,5\}$ and at least ten distinct adopters, without a cap.}
-\label{tab:dataset_summary}
+\caption{Data used in this paper.}
+\label{tab:data}
 \begin{tabular}{@{}lr@{}}
 \toprule
 \textbf{Quantity} & \textbf{Value} \\
 \midrule
-Registered agents (agents table) & 90,704 \\
-Active agents (at least one item in the window) & 73,543 \\
-Observation period & 24 days \\
+Registered agents & 90,704 \\
+Active agents (at least one post or comment) & 73,543 \\
+Days & 24 \\
 Posts / comments & 222,791 / 879,629 \\
-Interactions in the reply network & 154,231 \\
-\quad Network nodes / directed edges & 14,542 / 90,574 \\
-Information cascades identified & 471,608 \\
-\quad Meme/textual cascades & 471,316 (99.94\%) \\
-\quad Skill cascades & 286 (0.06\%) \\
-\quad Behavioral cascades & 6 ($<$0.01\%) \\
-Total adoption events & 15,725,488 \\
-Technical discussion threads & 43,123 \\
-Collaborative events identified & 164 \\
+Replies that link two agents & 154,231 \\
+Phrase cascades (used by at least 10 agents) & 471,316 \\
+Code and formatting cascades & 286 / 6 \\
+Technical threads & 43,123 \\
+Group threads (Section~\ref{sec:collab}) & 164 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\section{Methods}
-\label{sec:methods}
+\section{Roles}
+\label{sec:roles}
 
-\subsection{Structural Roles}
+To look for roles we build a reply network. Each agent is a node, and there is a link from agent $u$ to agent $v$ when $u$ comments on a post by $v$ or replies to a comment by $v$, weighted by how often this happens. For every agent we compute five measures of its position: how many agents reply to it (in-degree), how many it replies to (out-degree), how often it lies on the shortest path between other agents (betweenness), how often its contacts also reply to each other (clustering coefficient), and PageRank. We standardize the five measures and group agents with k-means, trying 3 to 8 groups and choosing the number with the best silhouette score \citep{rousseeuw1987silhouettes}, which measures how well separated the groups are. Agents in the registry with no reply link get zero on every measure and stay in the analysis.
 
-To test the stratification hypothesis we build a directed, weighted interaction network in which nodes are agents and an edge $u \to v$ records that $u$ wrote a top-level comment on a post by $v$ or replied to a comment by $v$, weighted by the number of such interactions, with self-interactions dropped; the archive does not record mentions, so they are not used. Five features are extracted for every agent that jointly describe local and global position, namely in-degree as a measure of receptivity, out-degree as a measure of broadcast activity, exact betweenness centrality as brokerage between communities, the clustering coefficient as a tendency toward clique formation, and PageRank as influence weighted by the prestige of interaction partners, and all five are standardized to zero mean and unit variance so that scale differences do not drive the clustering. Agents in the agents table with no interaction receive zero on every feature and are kept, which matters for interpretation because they all share one identical feature vector. We run k-means for $k \in \{3,\ldots,8\}$ and select $k$ by maximizing the silhouette coefficient \citep{rousseeuw1987silhouettes}, we assess stability with 100 bootstrap resamples scored by the adjusted Rand index (ARI) against the reference partition, and we compare k-means with Gaussian mixture models to check whether soft assignments describe the roles better than hard ones. Agglomerative clustering is excluded because its $O(n^2)$ memory requirement is prohibitive at the population size of this archive. Separately from the network clustering, we assign each agent a behavioral role by thresholding standardized behavioral measures, so that an agent is a Specialist when its normalized topic entropy is more than 0.5 SD below the mean, a Connector when its betweenness is more than 0.5 SD above the mean, an Initiator when its post-to-comment ratio is more than 0.5 SD above the mean and it posts more than average, a Synthesizer when its post-to-comment ratio is more than 0.5 SD below the mean and its in-degree is above average, and a Generalist otherwise, which gives an interpretable but rule-based overlay. To ask whether the structure is particular to agents we apply the same pipeline to 499,116 comments by 73,601 authors in r/programming, taken from the most recent whole days of a public Reddit comment dump until the number of distinct authors matches the number of active MoltBook agents.
+The groups are very well separated, with a silhouette of 0.916 at the chosen 8 groups, and they are stable, since 100 bootstrap samples recover the same grouping with an average adjusted Rand index of 0.93. Figure~\ref{fig:clusters} shows why this does not mean the agents have roles. One group holds 92.9\% of all agents, and its members sit below average on every measure. Most of them, 84.0\% of all registered agents, have no reply link at all, so they share exactly the same values, and a group of identical points far from everyone else is easy to separate. Part of this comes from the missing posts described in Section~\ref{sec:data}, but on the merged data, which restores those links, 83.9\% of agents still have at most one reply link (Table~\ref{tab:checks}). The high score therefore tells us that inactive agents are far from active ones, and nothing more.
 
-\subsection{Cascades and Adoption}
+Among the active agents, the groups differ mainly in how active they are. Groups 2 through 7 are ordered by how many replies their members send and receive, up to a single agent who sent 5,744 replies. Group 1, with 4.4\% of agents, is the only one that stands out for a reason other than volume, because its members' few contacts also reply to each other, which gives them a high clustering coefficient. The number of groups is also not well defined. The silhouette rises only from 0.906 to 0.916 between 3 and 8 groups, so the choice of 8 rests on differences smaller than the variation between runs. A Gaussian mixture model, which allows agents to belong partly to several groups, agrees only moderately with k-means (adjusted Rand index 0.54) and assigns almost every agent firmly to one group, so it does not reveal more roles either.
 
-Cascades are extracted by n-gram matching with $n \in \{2,3,4,5\}$: every distinct word n-gram in a post or comment defines a candidate cascade, and a candidate becomes a cascade when at least ten distinct agents use it within the observation window. We use the threshold of ten and not two because at two adopters there are 7.1 million distinct n-grams, dominated by ordinary phrases that any two writers would produce independently, the earliest item containing the n-gram is the seed, and later items are ordered chronologically to reconstruct propagation. Two further extractors add skill cascades, defined by identical code blocks, and behavioral cascades, defined by recurring formatting patterns, so the cascade type comes from the extractor that found it. Agent $a$ adopts cascade $c$ at the time of its first item that contains it. Cascade sizes are tested against a power law following \citet{clauset2009power}, including maximum likelihood estimation of the exponent $\alpha$ and of the lower cutoff $x_{\min}$, a bootstrap goodness-of-fit test, and likelihood ratio comparisons against exponential, lognormal, and truncated power-law alternatives. As a robustness check that does not depend on exact wording, we also build cascades from sentence embeddings (all-MiniLM-L6-v2), linking items whose cosine similarity is at least $\tau$ and taking connected components, with $\tau = 0.82$ chosen on a held-out calibration sample against a lexical near-duplicate proxy (test F1 0.886, precision 0.930, recall 0.847).
+Simple rules based on posting behavior give the same picture. Under rules that call an agent an Initiator if it posts much more than it comments, a Connector if its betweenness is high, and so on (Appendix~\ref{app:clustering}), 89.5\% of agents are Generalists, 9.8\% are Initiators, 0.6\% are Connectors, and no agent qualifies as a Specialist or a Synthesizer. For comparison we ran the same pipeline on 499,116 comments from r/programming, sampled to have about as many authors as MoltBook has active agents. It also produces one dominant group, but only 42\% of its authors have at most one reply link, against 87\% on MoltBook. We do not read much into this difference, because the Reddit sample includes only people who commented, spans 500 days instead of 24, and links only comment replies.
 
-An exposure is one distinct in-neighbor in the static reply network, which is an agent that commented on or replied to the focal agent at any time in the window, that has used the cascade, and a neighbor counts once however many times it used the cascade or interacted with the focal agent. For an agent that adopts, only neighbors that adopted strictly earlier count, while for an agent that never adopts, every adopting neighbor in the whole window counts, which is the rule in the original code. Because this rule credits non-adopters with more exposure than adopters for the same network, we also count exposure as it accumulates, as the number of distinct in-neighbors that have adopted by time $t$ with the clock starting at the seed, and we run a logistic sensitivity model in which exposure flows in the reader direction, from authors to the agents who commented on their content.
-
-Adoption dynamics are examined with two models that answer slightly different questions. A logistic regression of adoption on linear and quadratic exposure terms, fitted over every network node and every cascade with standard errors clustered by cascade, distinguishes simple contagion (linear), complex contagion (accelerating), and saturating contagion (concave), and a Cox proportional hazards model describes time to adoption, treating each agent's first adoption of a cascade as the event and right-censoring agents who never adopt at the cascade's last adoption. We fit the Cox model on a random sample of 100 cascades to contain computational cost, once with the static exposure count and once with cumulative exposure as a time-varying covariate, and in each case both pooled and stratified by cascade. A shared-frailty Cox model is not available in our Python toolchain, so the stratified model, which gives every cascade its own baseline hazard, stands in for it. The proportional hazards assumption is checked with Schoenfeld residuals for the static models.
-
-\subsection{Collaborative Events and Quality}
-
-A technical thread is a post in the window whose title, body, or comments contain at least one term from a curated vocabulary of programming, debugging, and system design keywords. A collaborative event is a technical thread that satisfies three further conditions at once: at least three distinct participating agents, which separates coordination from monologue, at least five comments, which excludes brief acknowledgements, and a duration of at least 30 minutes, which excludes rapid exchanges that do not reflect sustained work. The outcome of each event is a composite quality score $Q \in [0,1]$ computed on the thread's solution comment, which is the last comment containing a code marker or else the last comment. Our primary score, $Q_{\text{spec}}$, combines code presence (weight 0.30), comment quality (0.30, the mean of the rescaled VADER compound score \citep{hutto2014vader} and $\min(1, \text{words}/50)$, as a proxy for substantive discussion), test inclusion (0.20), and syntax validity (0.20, from attempting to parse code blocks with Python's \texttt{ast} module). The original code implemented a different score, $Q_{\text{code}}$, with code presence (0.30), the presence of comment markers (0.20), test vocabulary (0.30), and balanced brackets (0.20), and we report both because the two disagree on the central comparison; across events their Spearman correlation is 0.805. The weights are a priori choices, so we redraw them 20 times uniformly from the simplex and report how the ranking of events and the success rate move, and we drew a blinded sample of 100 events stratified by quintile of $Q_{\text{spec}}$ for human rating, and since those ratings are still being collected, this version reports no agreement statistics. An event counts as successful when $Q \geq 0.5$.
-
-The baseline we planned, single-agent technical threads of similar length in the same submolt, cannot be estimated on the pinned revision, because only 47 single-agent technical threads exist and all 55 events that find a match find the same single thread. We therefore compare each event with technical threads that are not events and have one or two participants, in the same submolt and with a number of comments within $\pm 2$, using up to five matches per event, and the baseline value for an event is the mean $Q$ over its matches. We report a paired $t$-test on the event-level differences together with Cohen's $d_z$, and we rematch twice more, once adding keyword count within $\pm 1$ as a proxy for difficulty, and once dropping the participation restriction and matching on participants within $\pm 1$ as well. To see whether quality tracks participation, we regress $Q$ on the logarithm of the number of participants, with HC3 standard errors, both across events and across all technical threads with at least five comments.
-
-\section{Results}
-\label{sec:results}
-
-\subsection{Population Structure}
-\label{sec:res_structure}
-
-The silhouette rises almost monotonically over the range we searched, from 0.906 at $k=3$ to 0.916 at $k=8$, so the selected $k=8$ sits at the edge of the range and differs from $k=6$ (0.913) by less than k-means initialization noise, which means the number of clusters is not identified by this criterion. The partition is stable in the sense that bootstrap resamples reproduce it with a mean ARI of 0.930 (95\% interval 0.712 to 0.999) and a mean silhouette of 0.907 (0.895 to 0.919), but Table~\ref{tab:network_clusters} shows why that stability says little about roles, since the largest cluster holds 92.9\% of agents and sits below the mean on all five features. Of the 90,704 registered agents, 84.0\% never send or receive an interaction and so share one identical feature vector, 87.2\% have a total degree of at most one, and the whole population has only 9,711 distinct feature rows, so the high silhouette measures how far this inactive mass sits from a small active core, and it does not show separated roles among the agents who do interact. Inside the active minority, cluster 1 (4.4\%) is the only group defined by something other than volume, since its members have a mean clustering coefficient of 0.79 and almost no out-degree, which describes agents whose few commenters also comment on each other, while clusters 2 through 7 are ordered mainly by how much their members send and receive, down to a single agent with 5,744 outgoing interactions. A Gaussian mixture with $k=8$, which BIC also selects, reaches a silhouette of 0.818 and agrees with k-means only moderately (ARI 0.536), and its assignments are nearly hard, with a mean maximum posterior of 0.996 and only 1.2\% of agents below 0.9, so soft assignments do not reveal a richer set of positions.
-
-The behavioral overlay in Table~\ref{tab:role_taxonomy_results} tells the same story, since 89.5\% of agents are Generalists, 9.8\% are Initiators, 0.6\% are Connectors, and no agent meets the Specialist or Synthesizer rule. These structural numbers move with the data choices, because removing flagged agents shrinks the network to 7,718 nodes, makes $k=3$ optimal with a silhouette of 0.985 and a largest cluster of 99.8\%, and drops the bootstrap ARI to 0.655, while the merged data selects $k=7$ with a silhouette of 0.897 and a largest cluster of 89.8\%, but in every variant one cluster holds the large majority of agents. The r/programming comparison also yields a dominant cluster (99.4\% at $k=3$, silhouette 0.935), but only 42.0\% of its authors have a degree of at most one against 87.2\% on MoltBook, and we do not read much into that gap because the Reddit population consists of active commenters, its window spans 500 days against 24, and its edges are comment replies only.
+So the answer to the first question is that MoltBook agents do not show distinct roles. The network separates a large inactive group from a small active one, and within the active group agents differ by how much they do, not by what kind of thing they do. This contrasts with the role differentiation suggested for MoltBook's first 12 days by \citet{price2026claws}.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{figures/fig1_clusters.pdf}
-\caption{Cluster sizes and mean standardized features for the $k=8$ k-means partition of 90,704 agents. One cluster holds 92.9\% of agents and lies below the mean on every feature; the remaining clusters are separated mainly by in-degree, out-degree, and PageRank, with cluster 1 the exception through its high clustering coefficient.}
+\caption{Cluster sizes and average features. (a) Number of agents in each of the 8 k-means groups (log scale). (b) Average standardized value of each feature in each group. Group 0 holds 92.9\% of agents and is below average on every feature; groups 2 to 7 differ mainly in how many replies they send and receive.}
 \label{fig:clusters}
 \end{figure}
 
-\begin{table}[H]
-\centering
-\caption{Network-based cluster distribution ($k=8$, silhouette 0.916). Interpretations name the features on which the cluster mean is more than 0.5 SD above the population mean.}
-\label{tab:network_clusters}
-\begin{tabular}{@{}crrl@{}}
-\toprule
-\textbf{Cluster} & \textbf{Count} & \textbf{Proportion} & \textbf{Interpretation} \\
-\midrule
-0 & 84,239 & 92.87\% & Periphery: below average on all five features \\
-1 & 3,958 & 4.36\% & Clique members (clustering $z = 4.3$) \\
-2 & 2,310 & 2.55\% & Receivers with high PageRank \\
-3 & 171 & 0.19\% & Active core: receive, send, and broker \\
-4 & 13 & 0.01\% & High-prestige receivers (PageRank $z = 53$) \\
-5 & 10 & 0.01\% & Heavy broadcasters (out-degree $z = 54$) \\
-6 & 2 & $<$0.01\% & Hubs on all centrality features \\
-7 & 1 & $<$0.01\% & Single hub (5,744 outgoing interactions) \\
-\bottomrule
-\end{tabular}
-\end{table}
+\section{How Phrases Spread}
+\label{sec:diffusion}
 
-\begin{table}[H]
-\centering
-\caption{Behavioral role distribution over 90,704 agents. Thresholds are in standard deviations from the population mean of each measure.}
-\label{tab:role_taxonomy_results}
-\begin{tabular}{@{}lrrl@{}}
-\toprule
-\textbf{Role} & \textbf{Count} & \textbf{Proportion} & \textbf{Definition} \\
-\midrule
-Generalist & 81,198 & 89.52\% & none of the rules below \\
-Initiator & 8,921 & 9.84\% & post/comment ratio $> 0.5$ SD and posts above mean \\
-Connector & 585 & 0.64\% & betweenness $> 0.5$ SD \\
-Specialist & 0 & 0.00\% & topic entropy $< -0.5$ SD \\
-Synthesizer & 0 & 0.00\% & post/comment ratio $< -0.5$ SD and in-degree above mean \\
-\bottomrule
-\end{tabular}
-\end{table}
+We follow phrases instead of links, because a shared phrase is something we can trace from one agent to the next. A phrase cascade is a sequence of two to five words that at least ten different agents use during the window, and an agent adopts the phrase at the time of its first post or comment that contains it. We also track identical code blocks and recurring formatting patterns, but these add only 292 cascades to the 471,316 phrase cascades. We need the threshold of ten agents because at two agents there are millions of word sequences, most of them common phrases that any two writers would produce on their own.
 
-\subsection{Information Diffusion}
-\label{sec:res_diffusion}
-
-Without a cap there are 471,316 meme cascades with at least ten adopters, plus 286 skill and 6 behavioral cascades, and their sizes run from ten to 48,725 adopters with a median of 16. The largest cascades are not ideas in any ordinary sense, since the top seven are fragments of the same token-minting command (for example ``mbc 20 op mint''), each repeated by more than 40,000 agents, which is a reminder that the heaviest part of the tail is made by scripted posting. Fitting the full set gives $\alpha = 2.303$ (95\% CI 2.299 to 2.307) with $x_{\min} = 10$ and a KS distance of 0.0069, and the power law beats an exponential decisively (normalized log-likelihood ratio 41.1), but both a lognormal ($-15.4$, $p < 10^{-50}$) and a truncated power law ($-4.5$, $p < 0.001$) fit better than it, so the distribution is heavy-tailed but not a pure power law (Table~\ref{tab:powerlaw_fits}, Figure~\ref{fig:ccdf}). The estimate of $\alpha = 2.57$ in our earlier version is reproduced exactly on the 10,000 largest cascades, but its $x_{\min}$ of 94 equals the size of the smallest cascade the cap kept, so that fit describes the cap-truncated top of the distribution, and even there the bootstrap goodness-of-fit test rejects the power law ($p < 0.005$). The embedding cascades, which group paraphrases and do not depend on exact wording, are far fewer (253 with at least ten adopters, and 241 to 235 when $\tau$ moves by $\pm 0.05$), and they give $\alpha = 2.21$ (2.06 to 2.37) with a goodness-of-fit $p$ of 0.115 and no significant preference between the power law and the lognormal, which is consistent with the exact-match result given how few cascades there are.
-
-When we look at how adoption changes with the number of neighbors who have already adopted, it becomes steadily more likely as that number grows, since the binned adoption rate is 0.13\% among agent and cascade pairs with no adopting in-neighbor, 0.31\% with one, 0.62\% with two, 1.07\% with three, 2.35\% with five, 6.26\% with ten, and 11.6\% with eighteen, so the rate roughly doubles with each of the first few exposures and then keeps rising more slowly (Figure~\ref{fig:exposure}). The logistic model over 6.86 billion pairs and 471,608 cascade clusters gives a positive linear term (0.648, SE 0.0025) and a negative quadratic term ($-0.0199$, SE 0.0003), which places the vertex of the log-odds at 16.3 exposures, and the reader-direction variant has the same shape (0.858 and $-0.0349$), as does the capped reproduction set (Table~\ref{tab:adoption_models}). The quadratic form fits the observed rates poorly, though, since it tracks them up to about six exposures, then overshoots, predicting 21\% at sixteen exposures where we observe 10.5\%, and turns down after its vertex while the observed rate keeps climbing, to 15\% at 21 to 30 exposures, 20\% at 31 to 50, and 34\% above 100, so the negative quadratic term describes the functional form we imposed and not a turning point in the data. The Cox models split sharply by how exposure is counted. With the static count, the hazard ratio per exposure is 0.009 (95\% CI 0.002 to 0.041) pooled with cascade-clustered errors and 0.014 stratified by cascade, and the earlier procedure on the 100 largest cascades gives 0.498, which matches the 0.528 of our earlier version in direction; but with cumulative exposure as a time-varying covariate, on the same 100 random cascades and 2,027 adoption events, the hazard ratio is 1.170 (1.160 to 1.180) pooled and 1.138 (1.126 to 1.150) stratified, so each additional adopting neighbor is associated with a higher instantaneous adoption hazard. The static count gives every non-adopter credit for neighbors who adopted at any point in the window while giving adopters credit only for neighbors who adopted before them, so a hazard ratio below one is what that rule produces mechanically, and we treat the time-varying estimate as the one that answers the question. The direction is the same with flagged agents removed (time-varying stratified HR 1.543) and with the incident days removed (1.336).
+Most cascades are small. The median cascade reaches 16 agents, and only a few reach thousands. The largest ones are not ideas in any usual sense, since the top seven are pieces of the same token-minting command (for example ``mbc 20 op mint''), each repeated by more than 40,000 agents, which fits the share of content written by scripted accounts. Figure~\ref{fig:ccdf} shows the share of cascades that reach each size. Following \citet{clauset2009power}, a power law fits above ten agents with exponent $\alpha = 2.30$ (Table~\ref{tab:powerlaw}), and it fits better than an exponential, but a lognormal and a power law with an exponential cutoff both fit better than the pure power law. The distribution is heavy-tailed, meaning that very large cascades are far more common than they would be under an exponential, but it is not a pure power law. The earlier estimate of $\alpha = 2.57$ came from the 10,000 largest cascades only, and its lower cutoff of 94 agents is simply the size of the smallest cascade that cut kept (Figure~\ref{fig:ccdf}b). We also grouped posts by meaning instead of exact wording, using sentence embeddings, and found 253 such cascades with $\alpha = 2.21$. With this few cascades neither the power law nor the lognormal is favored.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{figures/fig2_ccdf.pdf}
-\caption{Complementary cumulative distribution of the sizes of 471,608 cascades with at least ten adopters, with maximum likelihood fits above $x_{\min} = 10$. The lognormal and truncated power law fit significantly better than the pure power law ($\alpha = 2.30$). The capped set of the 10,000 largest cascades starts at 94 adopters, which is where its fitted $x_{\min}$ falls.}
+\caption{Cascade sizes. Share of cascades that reach at least each size, with fitted curves above the lower cutoff $x_{\min}$. (a) All 471,608 cascades. The lognormal and the cutoff power law fit better than the pure power law. (b) Only the 10,000 largest cascades, as in the earlier version. The fitted cutoff of 94 is where that selection begins.}
 \label{fig:ccdf}
 \end{figure}
 
 \begin{table}[H]
 \centering
-\caption{Power-law fits to cascade sizes. LR is the normalized log-likelihood ratio, positive when the power law is favored, with the significantly favored model in parentheses ($p < 0.05$).}
-\label{tab:powerlaw_fits}
+\caption{Power-law fits to cascade sizes. LR is the normalized log-likelihood ratio, positive when the power law fits better. The model in parentheses is favored at $p < 0.05$.}
+\label{tab:powerlaw}
 \small
 \begin{tabular}{@{}lrrrrrr@{}}
 \toprule
-\textbf{Set} & \textbf{$n$} & \textbf{$\alpha$ (95\% CI)} & \textbf{$x_{\min}$} & \textbf{LR exp.} & \textbf{LR lognormal} & \textbf{LR trunc.} \\
+\textbf{Cascades} & \textbf{$n$} & \textbf{$\alpha$ (95\% CI)} & \textbf{$x_{\min}$} & \textbf{vs. exponential} & \textbf{vs. lognormal} & \textbf{vs. cutoff PL} \\
 \midrule
-Uncapped, $n=2..5$ (primary) & 471,608 & 2.303 (2.299, 2.307) & 10 & 41.06 (PL) & $-15.37$ (LN) & $-4.46$ (TPL) \\
-Uncapped, $n=3..5$ & 281,814 & 2.440 (2.435, 2.446) & 10 & 26.62 (PL) & $-2.86$ (LN) & $-0.72$ \\
-Capped reproduction, $n=3..5$ & 10,292 & 2.571 (2.540, 2.601) & 94 & 10.59 (PL) & 2.73 (PL) & 0.40 \\
-Embedding cascades & 253 & 2.211 (2.057, 2.366) & 11 & 3.28 (PL) & $-1.00$ & $-0.01$ \\
+All & 471,608 & 2.30 (2.30, 2.31) & 10 & 41.1 (PL) & $-15.4$ (lognormal) & $-4.5$ (cutoff) \\
+10,000 largest & 10,292 & 2.57 (2.54, 2.60) & 94 & 10.6 (PL) & 2.7 (PL) & 0.4 (neither) \\
+By meaning & 253 & 2.21 (2.06, 2.37) & 11 & 3.3 (PL) & $-1.0$ (neither) & $0.0$ (neither) \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\begin{table}[H]
-\centering
-\caption{Adoption models. Logistic coefficients are per exposed in-neighbor with standard errors clustered by cascade; Cox models are fitted on 100 randomly sampled cascades (2,027 adoption events) and report the hazard ratio per exposure.}
-\label{tab:adoption_models}
-\small
-\begin{tabular}{@{}llrrr@{}}
-\toprule
-\textbf{Model} & \textbf{Predictor} & \textbf{Coefficient} & \textbf{SE} & \textbf{$p$-value} \\
-\midrule
-Logistic, primary & exposure & 0.648 & 0.0025 & $<10^{-300}$ \\
- & exposure$^2$ & $-0.0199$ & 0.0003 & $<10^{-300}$ \\
-Logistic, reader direction & exposure & 0.858 & 0.0135 & $<10^{-300}$ \\
- & exposure$^2$ & $-0.0349$ & 0.0013 & $1.6 \times 10^{-161}$ \\
-Logistic, capped reproduction & exposure & 0.326 & 0.0041 & $<10^{-300}$ \\
- & exposure$^2$ & $-0.0074$ & 0.0002 & $5.8 \times 10^{-249}$ \\
-\midrule
- & & \textbf{HR (95\% CI)} & & \\
-Cox, static, pooled & exposure & 0.009 (0.002, 0.041) & 0.752 & $5.4 \times 10^{-10}$ \\
-Cox, static, stratified & exposure & 0.014 (0.013, 0.016) & 0.052 & $<10^{-300}$ \\
-Cox, time-varying, pooled & exposure & 1.170 (1.160, 1.180) & 0.004 & $2.5 \times 10^{-288}$ \\
-Cox, time-varying, stratified & exposure & 1.138 (1.126, 1.150) & 0.005 & $1.0 \times 10^{-127}$ \\
-\bottomrule
-\end{tabular}
-\end{table}
+To ask whether phrases spread from agent to agent, we count how many of an agent's neighbors used a phrase before it did. A neighbor here is an agent who has replied to the focal agent at any time in the window, and each neighbor counts once however often it used the phrase. How we count matters. The earlier version gave an agent who never used the phrase credit for every neighbor who used it at any point in the 24 days, but gave an agent who did use it credit only for neighbors who used it first. That rule makes non-users look more exposed than users for no reason except the counting, so it pushes the estimated effect of exposure down. We therefore count exposure as it builds up: at each moment, the number of neighbors who have used the phrase so far.
+
+Figure~\ref{fig:exposure}a shows the basic pattern. Across 6.9 billion pairs of agents and phrases, 0.13\% of agents with no exposed neighbor adopt the phrase, 0.31\% with one, 0.62\% with two, and about 10\% with fifteen. The rate keeps rising after that, to 15\% with 21 to 30 such neighbors and 34\% with more than 100. A logistic regression with a squared term, the model used in the earlier version, fits these rates poorly. It follows them up to about six neighbors, then overshoots, predicting 21\% at sixteen neighbors where we observe 10.5\%, and then turns down while the data keep rising. Its negative squared term therefore comes from the shape we imposed and is not evidence that adoption levels off.
+
+The timing models in Figure~\ref{fig:exposure}b give the same answer once exposure is counted as it builds up. We fit Cox models, which describe how quickly agents adopt, on a random sample of 100 cascades with 2,027 adoptions. With exposure counted over time, each additional neighbor who has used the phrase goes with a 14\% higher adoption rate (hazard ratio 1.14, 95\% CI 1.13 to 1.15) when each cascade gets its own baseline rate, and 17\% when they share one. With the earlier counting rule, the same data give hazard ratios of 0.01, which is how the earlier version came to report that exposure lowered adoption. The full model results are in Appendix~\ref{app:adoption}.
+
+So the answer to the second question is that adoption rises with every additional neighbor who has used a phrase, and we see no point at which it levels off. This does not show that neighbors cause each other to adopt. Agents who reply to each other may resemble each other, read the same posts, or be run by the same operator, and each of these would produce the same pattern \citep{shalizi2011homophily}. Our time-based model also treats each additional neighbor as having the same effect, so it cannot tell whether several exposures matter more than the sum of single ones, which is what separates complex from simple contagion \citep{centola2007complex}.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{figures/fig3_exposure.pdf}
-\caption{Share of agent and cascade pairs that adopt, by the number of distinct in-neighbors that adopted the cascade, with 95\% Wilson intervals and the fitted quadratic logistic curve. The rate rises from 0.13\% with no exposure to 11.6\% with eighteen exposures. The quadratic fit overshoots the observed rates beyond about six exposures and turns down at 16.3, while the observed rate keeps rising (panel a). Hazard ratios per exposure fall below one with the static exposure count and above one with the time-varying count (panel b).}
+\caption{Adoption and exposure. (a) Share of agents who adopt a phrase, by number of neighbors who used it, with 95\% intervals and the earlier version's logistic fit. The fit overshoots after about six neighbors and turns down where the data keep rising. (b) Hazard ratio per additional exposed neighbor in four Cox models. Counting exposure over the whole window gives values below one; counting it as it builds up gives values above one.}
 \label{fig:exposure}
 \end{figure}
 
-\subsection{Collaborative Threads}
-\label{sec:res_collab}
+\section{Working Together on Technical Problems}
+\label{sec:collab}
 
-Of the 43,123 technical threads in the window, 164 are collaborative events, and 87 of them find at least one matched thread with one or two participants, drawing on 74 distinct baseline threads. Under $Q_{\text{spec}}$ the matched events average 0.386 against a baseline mean of 0.158 (SD 0.145), with success rates of 25.3\% and 4.1\%, and the paired difference of 0.131 is significant ($t_{86} = 5.68$, $p = 1.8 \times 10^{-7}$, $d_z = 0.61$), which runs opposite to the coordination-cost hypothesis (Table~\ref{tab:baseline_comparison}). The gap is fragile in ways that point to what the threads are rather than to how agents work together. Adding keyword count to the match leaves it at $d_z = 0.52$ ($p = 2.2 \times 10^{-4}$, 57 events), but matching on participants as well, which lets 155 events find matches among 687 threads, cuts the difference to 0.051 and $d_z$ to 0.23 ($p = 0.004$). Under $Q_{\text{code}}$ there is no significant difference in any of the three matches ($d_z$ of $-0.12$, $0.00$, and $0.08$, all $p > 0.24$), and with flagged agents removed the $Q_{\text{spec}}$ gap against the low-participation baseline falls to $d_z = 0.15$ ($p = 0.26$, 57 events), while the single-agent baseline, which becomes estimable there, gives $d_z = 0.13$ ($p = 0.34$, 51 events).
+To study collaboration we first find technical threads, which are posts whose title, text, or comments use at least one term from a list of programming, debugging, and system design words. There are 43,123 such threads. We call a technical thread a group thread when at least three agents take part, it has at least five comments, and it lasts at least 30 minutes. Only 164 threads meet all three conditions.
 
-The matched threads are much thinner than the events, with 3.9 comments, 1.6 technical keywords, 950 characters, and 6.5 minutes of duration on average against 10.9 comments, 6.2 keywords, 7,519 characters, and 109 minutes, and Table~\ref{tab:quality_components} shows that success under $Q_{\text{spec}}$ is almost entirely a matter of whether the solution comment contains parseable code, since every successful event has code and 72\% have valid syntax while only 1.6\% of unsuccessful events have code, and comment quality barely differs (0.83 against 0.80). Across events, $Q_{\text{spec}}$ rises with the logarithm of the number of participants (slope 0.062, SE 0.029, $p = 0.034$, $R^2 = 0.019$, $n = 164$), and across all 9,905 technical threads with at least five comments the slope is 0.130 ($p < 10^{-150}$, $R^2 = 0.074$), but under $Q_{\text{code}}$ the slope across all threads is 0.008 ($p = 0.079$), so whether quality grows with participation depends on the score (Figure~\ref{fig:participants}). On the merged data, where there are 3,460 events among 232,096 technical threads, both $Q_{\text{spec}}$ comparisons favor events ($d_z = 0.42$ against the low-participation baseline and $0.17$ against single-agent threads), while $Q_{\text{code}}$ favors events slightly against the low-participation baseline ($d_z = 0.10$) and favors single-agent threads against the planned baseline ($d_z = -0.13$, $p = 10^{-7}$).
+We score each thread by the comment most likely to hold its answer, which is the last comment containing code, or the last comment if none does. Our main score, $\qmain$, adds up four parts: whether the comment contains code (weight 0.30), a measure of how substantial and positive the comment is, based on its length and its VADER sentiment \citep{hutto2014vader} (0.30), whether it mentions tests (0.20), and whether its code is valid Python (0.20). The earlier version's code used a different score, $\qalt$, with weights of 0.30 for code, 0.20 for comment markers such as \texttt{\#}, 0.30 for test words, and 0.20 for balanced brackets. We report both, because the two scores lead to different conclusions. A thread counts as successful when its score is at least 0.5.
+
+The comparison we planned, group threads against single-agent threads of similar length, is not possible here, because the data contain only 47 single-agent technical threads and every group thread that finds a match finds the same one. We compare instead with technical threads that have one or two agents, come from the same community, and have within two comments as many comments as the group thread, taking up to five matches for each group thread. For each group thread we compute the difference between its score and the average score of its matches, and test whether the average difference is zero with a paired $t$-test, reporting the effect size $d_z$.
+
+The first row of Table~\ref{tab:collab} shows that the 87 group threads that find matches score clearly higher under $\qmain$, at 0.39 against 0.16 for their matches ($d_z = 0.61$). This is the opposite of what we expected. The rest of the table shows how much of the gap is left as the comparison gets stricter. Requiring a similar number of technical keywords leaves it almost unchanged, but also matching on the number of agents, so that the comparison threads are other threads with several agents, cuts it to $d_z = 0.23$. Under $\qalt$ there is no significant gap in any row.
 
 \begin{table}[H]
 \centering
-\caption{Collaborative events against matched technical threads with one or two participants (same submolt, comments within $\pm 2$, up to five matches), scored with $Q_{\text{spec}}$. Baseline statistics are over the unique matched threads.}
-\label{tab:baseline_comparison}
-\begin{tabular}{@{}lr@{}}
+\caption{Group threads compared with matched threads. Each entry is the paired effect size $d_z$ (with $p$-value) for the difference between a group thread's score and the mean score of its matches.}
+\label{tab:collab}
+\small
+\begin{tabular}{@{}lrrr@{}}
 \toprule
-\textbf{Statistic} & \textbf{Value} \\
+\textbf{Matched threads} & \textbf{Group threads matched} & \textbf{$\qmain$} & \textbf{$\qalt$} \\
 \midrule
-Collaborative events / technical threads & 164 / 43,123 \\
-Events with at least one match & 87 \\
-Matched baseline threads & 74 \\
-Event mean $Q$ (success rate) & 0.386 (25.3\%) \\
-Baseline mean $Q$ (SD) & 0.158 (0.145) \\
-Baseline success rate & 4.1\% \\
-Paired difference, $t_{86}$, $p$ & 0.131, 5.68, $1.8 \times 10^{-7}$ \\
-Cohen's $d_z$ & 0.61 \\
-\midrule
-Rematch adding keyword count: $d_z$ ($p$, events) & 0.52 ($2.2 \times 10^{-4}$, 57) \\
-Rematch on participants and keywords: $d_z$ ($p$, events) & 0.23 (0.004, 155) \\
-Same three matches under $Q_{\text{code}}$: $d_z$ & $-0.12$, 0.00, 0.08 (all $p > 0.24$) \\
+1 to 2 agents, similar length & 87 & 0.61 ($<0.001$) & $-0.12$ (0.25) \\
+\quad and similar keyword count & 57 & 0.52 ($<0.001$) & 0.00 (0.99) \\
+Similar length, keyword count, and number of agents & 155 & 0.23 (0.004) & 0.08 (0.30) \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=\linewidth]{figures/fig4_participants.pdf}
-\caption{Quality of collaborative events by number of participants. $Q_{\text{spec}}$ rises with log participants (slope 0.062, $p = 0.034$); $Q_{\text{code}}$ rises less and not significantly (0.058, $p = 0.089$). Both fits explain about 2\% of the variance.}
-\label{fig:participants}
-\end{figure}
+Two facts explain most of the gap. Group threads are much longer than the threads they are matched with (Table~\ref{tab:threads}), with nearly three times as many comments and eight times as much text. And under $\qmain$, success almost always means that the answer comment contains code that parses (Table~\ref{tab:components}). Every successful group thread contains code and 72\% contain valid syntax, while only 1.6\% of unsuccessful ones contain code, and the comment quality part barely differs (0.83 against 0.80). A long thread has more chances to end in a comment with code, so a score that rewards code will favor long threads whether or not the agents in them work well together.
 
 \begin{table}[H]
 \centering
-\caption{Mean quality score components among successful ($Q \geq 0.5$) and unsuccessful collaborative events.}
-\label{tab:quality_components}
+\caption{Thread length. Averages for group threads and for the threads matched to them in the first row of Table~\ref{tab:collab}.}
+\label{tab:threads}
+\small
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+\textbf{Threads} & \textbf{$n$} & \textbf{Comments} & \textbf{Keywords} & \textbf{Characters} & \textbf{Agents} & \textbf{Minutes} \\
+\midrule
+Group threads & 164 & 10.9 & 6.2 & 7,519 & 10.2 & 109 \\
+Matched threads & 74 & 3.9 & 1.6 & 950 & 2.0 & 7 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Parts of the quality scores. Average value of each part among successful (score at least 0.5) and unsuccessful group threads.}
+\label{tab:components}
+\small
 \begin{tabular}{@{}llrrr@{}}
 \toprule
-\textbf{Score} & \textbf{Component} & \textbf{Weight} & \textbf{Successful} & \textbf{Unsuccessful} \\
+\textbf{Score} & \textbf{Part} & \textbf{Weight} & \textbf{Successful} & \textbf{Unsuccessful} \\
 \midrule
-$Q_{\text{spec}}$ & code presence & 0.30 & 1.000 & 0.016 \\
- & comment quality & 0.30 & 0.832 & 0.800 \\
- & test inclusion & 0.20 & 0.077 & 0.200 \\
- & syntax validity & 0.20 & 0.718 & 0.000 \\
+$\qmain$ & contains code & 0.30 & 1.00 & 0.02 \\
+ & comment quality & 0.30 & 0.83 & 0.80 \\
+ & mentions tests & 0.20 & 0.08 & 0.20 \\
+ & valid syntax & 0.20 & 0.72 & 0.00 \\
 \midrule
-$Q_{\text{code}}$ & code presence & 0.30 & 0.621 & 0.000 \\
- & comment markers & 0.20 & 0.152 & 0.061 \\
- & test vocabulary & 0.30 & 0.424 & 0.000 \\
- & balanced brackets & 0.20 & 0.985 & 0.990 \\
+$\qalt$ & contains code & 0.30 & 0.62 & 0.00 \\
+ & comment markers & 0.20 & 0.15 & 0.06 \\
+ & test words & 0.30 & 0.42 & 0.00 \\
+ & balanced brackets & 0.20 & 0.99 & 0.99 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+If agents gained from working together, we would also expect quality to rise with the number of agents in a thread. Figure~\ref{fig:participants} shows a weak rise. Among group threads, $\qmain$ rises by about 0.04 each time the number of agents doubles (slope 0.062 on the natural log of the number of agents, $p = 0.034$), but the number of agents explains only 2\% of the variation, and under $\qalt$ the slope is not significant ($p = 0.089$).
+
+So the answer to the third question is that we find no consistent evidence that agents write better answers together. Group threads score higher than thin threads with one or two agents, but the gap shrinks once the comparison threads also have several agents, it is absent under the alternative score, and Section~\ref{sec:checks} shows that it also disappears without scripted accounts. Two explanations fit what we see, and our data cannot choose between them. Group threads may be about problems that call for code in the first place, or the score may simply reward longer threads. The human ratings we are collecting for a sample of 100 threads will show whether either score matches what a reader would call a good answer.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{figures/fig4_participants.pdf}
+\caption{Quality and number of agents. Each point is one of the 164 group threads, with the least-squares line on the log of the number of agents. (a) Main score, slope 0.062 ($p = 0.034$). (b) Alternative score, slope 0.058 ($p = 0.089$).}
+\label{fig:participants}
+\end{figure}
+
+\section{Other Versions of the Data}
+\label{sec:checks}
+
+Table~\ref{tab:checks} repeats the main results without scripted accounts, without the days around the 31 January incident, and on the merged dataset. Removing the incident days changes almost nothing. Removing scripted accounts shrinks the network to 7,718 agents and the phrase cascades by more than half, but the network still has one dominant inactive group and the link between exposure and adoption gets stronger, with a hazard ratio of 1.54 per neighbor. The collaboration result is the one that does not hold. Without scripted accounts, the $\qmain$ gap against threads with one or two agents falls to $d_z = 0.15$ ($p = 0.26$), and against single-agent threads, which are numerous enough for a comparison once scripted accounts are gone, it is $d_z = 0.13$ ($p = 0.34$). The one significant result in this column is under $\qalt$ against single-agent threads ($d_z = 0.31$, $p = 0.03$), the opposite of the earlier pattern for that score. On the merged data, which has 3,460 group threads, group threads score higher under $\qmain$ against both comparison groups, but under $\qalt$ they score lower than single-agent threads ($d_z = -0.13$, $p < 0.001$). Which way the gap points depends on the score.
+
+\begin{table}[H]
+\centering
+\caption{Main results in other versions of the data. ``Not run'' marks an analysis that was too large to repeat on the merged data.}
+\label{tab:checks}
+\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+ & \textbf{Main} & \textbf{No scripted} & \textbf{No incident} & \textbf{Merged} \\
+\midrule
+Agents with at most one reply link & 87.2\% & 94.2\% & 87.3\% & 83.9\% \\
+Share in the largest group & 92.9\% & 99.8\% & 92.9\% & 89.8\% \\
+Silhouette & 0.92 & 0.99 & 0.92 & 0.90 \\
+Phrase cascades & 471,316 & 220,669 & 430,752 & not run \\
+Hazard ratio per exposed neighbor & 1.14 & 1.54 & 1.34 & not run \\
+Group threads & 164 & 81 & 164 & 3,460 \\
+$\qmain$ gap vs. 1 to 2 agents, $d_z$ ($p$) & 0.61 ($<0.001$) & 0.15 (0.26) & 0.61 ($<0.001$) & 0.42 ($<0.001$) \\
+$\qalt$ gap vs. 1 to 2 agents, $d_z$ ($p$) & $-0.12$ (0.25) & 0.03 (0.81) & $-0.12$ (0.25) & 0.10 ($<0.001$) \\
+$\qmain$ gap vs. single agent, $d_z$ ($p$) & too few & 0.13 (0.34) & too few & 0.17 ($<0.001$) \\
+$\qalt$ gap vs. single agent, $d_z$ ($p$) & too few & 0.31 (0.03) & too few & $-0.13$ ($<0.001$) \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -291,24 +266,23 @@ $Q_{\text{code}}$ & code presence & 0.30 & 0.621 & 0.000 \\
 \section{Discussion}
 \label{sec:discussion}
 
-\paragraph{How the logistic and Cox results fit together.}
-The logistic model and the static Cox model look like they disagree, since one says adoption keeps rising until about sixteen exposures and the other says each exposure lowers the hazard by more than half, but they share the same static exposure count, and the Cox model is the one that feels the asymmetry most because it compares adopters and non-adopters directly within each moment of risk. When we let exposure accumulate in time, which removes the asymmetry, the hazard rises with every adopting neighbor and stays above one after stratifying by cascade, which is the closest we can get to a frailty model here, and the binned rates keep rising all the way past one hundred exposures. So our reading is that the evidence does not support the saturation hypothesis, because the negative quadratic term in the logistic model comes from fitting a parabola in log-odds to a curve that rises quickly at first and then more slowly but never turns down, and whether that slower growth at high exposure reflects real diminishing returns, the exposure asymmetry, or the fact that very high exposure counts come from a small set of extremely active neighbors is something we cannot separate. The time-varying model is linear in exposure on the log hazard, so it also cannot tell simple contagion from complex contagion, and a test of reinforcement would need a model that lets the hazard bend with exposure.
+On roles, MoltBook looks less like a community with a division of labor and more like a small group of very active accounts surrounded by accounts that do almost nothing. This matches the hub-centered networks and low reciprocity reported for the platform's first days \citep{holtz2026anatomy, li2026rise, price2026claws}. Our results add that the high cluster quality such networks produce is a sign of this split and not of separate roles. Anyone who clusters agents on platforms like this one should first check how many agents have no activity at all, because those agents alone can make any grouping look well separated.
 
-\paragraph{What the collaboration result supports.}
-The planned comparison, multi-agent threads against matched single-agent threads, turned out to be impossible on the primary data, and the comparison we could run says collaborative threads score higher, not lower, which is the reverse of the coordination-cost hypothesis and of the $d = -0.88$ in our earlier version, a number that came from testing event quality against the constant 0.5. But we don't think the higher score shows that agents produce better work together. The gap shrinks by more than half when participation and topic density are matched, it vanishes under a second reasonable score, it is not significant once likely scripted agents are removed, and success under the primary score is almost the same thing as the solution comment containing parseable code, which a thread with eleven comments and seven thousand characters has more chances to do than a thread with four comments and one thousand. So the measurement account, in which the score rewards thread length and code density, and the task-selection account, in which collaborative threads are the ones about problems that call for code in the first place, both fit what we see, and the coordination-cost account does not, while nothing in our observational design separates the first two. The human ratings of $Q$ we are collecting will tell us whether the score tracks what a reader would call a good outcome, and until they are in, we treat the collaboration result as a statement about the score and not about the quality of agent work.
+On diffusion, agents are more likely to use a phrase the more of their neighbors have used it, and the rate does not level off. Because exposure was not assigned at random, we cannot say how much of this is influence. The most useful next step on these data would be the shuffle test of \citet{anagnostopoulos2008influence}, which asks whether the order of adoptions along links matters at all. A firmer answer would need an experiment like \citet{centola2010spread}, in which exposure is assigned at random, for example by placing agents into feeds that do or do not show a given phrase.
 
-\paragraph{Implications.}
-Anyone who builds or studies large agent populations should expect most registered agents to do nothing, a small and mostly scripted core to produce most of the text, and the most visible cascades to be repeated commands and not shared ideas, which means population-level statistics on such platforms say as much about posting automation as about what language models do when they meet each other. The other implication is methodological, since in this archive three headline results of our own earlier analysis came from a hard cap on cascades, an asymmetric exposure count, and a missing baseline, so we think analyses of agent platforms should report uncapped distributions, count exposure in time, and show the comparison group they actually used.
+On collaboration, our results run against the idea that coordination costs make groups of agents worse, but they do not support the opposite idea either. The gap between group threads and other threads depends on what the comparison threads look like, which score we use, and which accounts we include, and the score we rely on rewards long threads that contain code. Settling the question would need two things we do not have: a quality measure checked against human judgment, and a design in which the same problem is assigned at random to one agent or to several.
+
+There is also a broader lesson about how these platforms are measured. Most of the content comes from a small share of accounts, and the largest cascades are repeated commands, so population-wide statistics on agent platforms may say as much about posting scripts as about how language models interact. And three results in our own earlier analysis came from a cap on cascades, a counting rule, and a missing comparison group, so we suggest that studies of these platforms report the full size distribution, count exposure as it builds up over time, and state which comparison group they used.
 
 \section{Limitations}
 \label{sec:limitations}
 
-The window covers 24 days early in the platform's life, so every regularity we report may change as the population and the platform mature. The pinned revision is missing most of the posts its top-level comments point to, which removes most edges from the network, and while the merged variant restores them and leaves the qualitative picture intact, we ran cascade extraction, the exposure models, and the power-law fits only on the pinned revision because the merged corpus of about 2.6 million items exceeded our memory budget. Platform mechanics such as feed ranking and rate limits shape who sees what, and the archive does not record them, nor does it record which model drives which agent, so we cannot attribute any pattern to model families or prompts. Several measurements are our choices and would change results if made differently, including the ten-adopter threshold for cascades, the reply network as the channel of exposure, the keyword vocabulary for technical threads, the event rules, and both quality scores, whose weights we varied (under random weights the rank correlation of $Q_{\text{spec}}$ with the original stays at a median of 0.94 but the success rate ranges from 17\% to 77\%), and which have not yet been validated against human ratings. The embedding cascades are calibrated against a lexical proxy and not against human judgment. The autonomy audit rests on heuristics without ground truth, and because the flagged agents write 77\% of all items, removing them changes the network, the cascades, and the collaboration result substantially, which is itself a finding about how much of the platform is driven by a few accounts. Removing the days around the 31 January incident leaves the structural and collaboration results unchanged and the diffusion results qualitatively unchanged, with the time-varying hazard ratio moving from 1.14 to 1.34. The silhouette criterion does not identify $k$ here, and a shared-frailty Cox model, for example with R's \texttt{coxme}, remains to be fitted. Above all, the design is observational, so none of the associations we report between exposure and adoption or between participation and quality should be read as effects.
+The study is observational, so none of the links we report between exposure and adoption, or between the number of agents and quality, should be read as effects. The window covers 24 days early in the platform's life, and the patterns may change as the platform grows. The archive revision we use lacks most of the posts that its top-level comments reply to, and although the merged dataset fixes this for the network and collaboration analyses, we could not repeat the phrase analyses on it. The archive does not record which model runs each agent, how the platform ranks content, or whether an operator steers an account, so we cannot attribute any pattern to a model, a prompt, or a person. Several choices are ours and would change the numbers if made differently, among them the ten-agent threshold for cascades, replies as the path of exposure, the keyword list for technical threads, and the rules for group threads. Both quality scores use weights we chose. When we draw the weights at random, the ranking of threads under $\qmain$ stays close to the original (median rank correlation 0.94), but the share of successful threads ranges from 17\% to 77\%, and neither score has yet been checked against human ratings. The rules for scripted accounts are heuristics without known accuracy. Finally, the number of k-means groups is not well determined, and we did not fit a Cox model with a random effect for each cascade, using a separate baseline rate for each cascade instead.
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-In the largest population of interacting language model agents we know of, structure is mostly the distance between a large inactive periphery and a small active core, cascades are heavy-tailed but not cleanly power-law and are led by repeated commands, adoption becomes more likely with each neighbor who has adopted once exposure is counted in time, and collaborative technical threads score higher than thin single-participant threads in a way we can't yet distinguish from those threads simply being longer and richer in code. The questions this leaves open are whether reinforcement in adoption accelerates or merely accumulates, whether any functional roles exist within the active core once scripted accounts are set aside, and whether multi-agent threads do better work by a measure that human readers would endorse.
+In 24 days of MoltBook, most of about 90,000 registered agents have at most one reply link to another agent, and the rest differ in how much they do and not in what they do. Phrases spread in the sense that adoption rises steadily with the number of neighbors who have used them, though we cannot tell how much of this is influence. Threads with several agents score higher than threads with one or two, but the gap depends on how we measure quality and which accounts we include, so we cannot say that agents do better work together. The open questions are whether any roles appear among active agents once scripted accounts are set aside, whether exposure causes adoption, and whether groups of agents write better answers by a measure that people agree with.
 
 \section*{Acknowledgements}
 
@@ -322,18 +296,44 @@ The MoltBook Observatory Archive is publicly available at \url{https://huggingfa
 
 \appendix
 
-\section{Clustering Validation}
-\label{app:validation}
+\section{Changes from the Earlier Version}
+\label{app:changes}
 
-Table~\ref{tab:ksweep} gives the k-means sweep. Over 100 bootstrap resamples with five initializations each, the silhouette has mean 0.907 (SD 0.007, minimum 0.890) and the ARI against the reference partition has mean 0.930 (SD 0.078, minimum 0.553), and the low tail of the ARI comes from resamples in which the small high-activity clusters merge or split. The Gaussian mixture with $k=8$ reaches a silhouette of 0.818, an ARI of 0.536 against k-means, and a mean maximum posterior of 0.996, and BIC decreases monotonically from $k=3$ ($-4.20 \times 10^6$) to $k=8$ ($-4.58 \times 10^6$), so it also selects the edge of the range.
+Table~\ref{tab:changes} lists the differences between this paper and the earlier version of the analysis. We reproduced each earlier number with the earlier code before changing it, so each row names the cause of the difference.
 
 \begin{table}[H]
 \centering
-\caption{k-means sweep on the five standardized network features.}
+\caption{Changes from the earlier version.}
+\label{tab:changes}
+\small
+\begin{tabular}{@{}p{3.2cm}p{4.6cm}p{6.6cm}@{}}
+\toprule
+\textbf{Result} & \textbf{Earlier version} & \textbf{This paper} \\
+\midrule
+Number of cascades & 10,323 & 471,608. The code kept only the 10,000 largest phrase cascades and used three- to five-word phrases, not two to five as described. \\
+Power-law exponent & 2.57, $x_{\min} = 104$ & 2.30, $x_{\min} = 10$. The earlier fit described only the largest cascades, and a lognormal fits the full set better. \\
+Effect of exposure & Hazard ratio 0.53 & 1.14. The earlier count credited non-adopters with every neighbor in the window but adopters only with earlier neighbors. \\
+Effect of collaboration & $d = -0.88$ & No consistent gap. The earlier test compared scores with the number 0.5 because the step that collected comparison threads returned none. \\
+Quality score & Described as $\qmain$ & The code computed $\qalt$. We report both. \\
+Role names & Amplifier and Curator & These roles were not in the code; we report the roles the code defines. \\
+Technical threads & 60,045 & 43,123. The earlier count included posts after the end of the window. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Clustering}
+\label{app:clustering}
+
+Table~\ref{tab:ksweep} shows the silhouette for each number of groups. Across 100 bootstrap samples the silhouette averages 0.907 (SD 0.007) and the adjusted Rand index against the full-data grouping averages 0.930 (SD 0.078, lowest 0.553); the low values come from samples in which the smallest, most active groups merge or split. The Gaussian mixture with 8 groups has a silhouette of 0.818, and BIC improves steadily up to 8 groups, so it too picks the largest number tried. Behavioral roles use standardized measures: Specialist if topic entropy is more than 0.5 SD below the mean, Connector if betweenness is more than 0.5 SD above the mean, Initiator if the ratio of posts to comments is more than 0.5 SD above the mean and the agent posts more than average, Synthesizer if that ratio is more than 0.5 SD below the mean and in-degree is above average, and Generalist otherwise.
+
+\begin{table}[H]
+\centering
+\caption{Silhouette by number of groups.}
 \label{tab:ksweep}
+\small
 \begin{tabular}{@{}rrrr@{}}
 \toprule
-\textbf{$k$} & \textbf{Silhouette} & \textbf{Inertia} & \textbf{Largest cluster} \\
+\textbf{Groups} & \textbf{Silhouette} & \textbf{Within-group sum of squares} & \textbf{Largest group} \\
 \midrule
 3 & 0.906 & 238,770 & 93.5\% \\
 4 & 0.908 & 166,337 & 93.4\% \\
@@ -345,33 +345,40 @@ Table~\ref{tab:ksweep} gives the k-means sweep. Over 100 bootstrap resamples wit
 \end{tabular}
 \end{table}
 
-\section{Power-Law Testing}
+\section{Cascade Sizes}
 \label{app:powerlaw}
 
-Table~\ref{tab:powerlaw_fits} gives the main fits. Two further sets complete the comparison: the 10,000 largest cascades with $n = 2..5$ give $\alpha = 2.682$ (2.636 to 2.727) with $x_{\min} = 235$, and the meme cascades alone give the same fit as the primary set to three decimals ($\alpha = 2.303$). The bootstrap goodness-of-fit test (200 iterations) gives $p < 0.005$ for the capped reproduction set and $p = 0.115$ for the embedding cascades, and we did not run it on the uncapped sets, where with nearly half a million observations any small departure is significant and the likelihood ratio tests are more informative. The number of distinct n-grams used by at least two, five, and ten agents is 1.41 million, 438 thousand, and 190 thousand for bigrams and 2.50 million, 514 thousand, and 172 thousand for trigrams, which is why the threshold of two adopters is not usable.
+With three- to five-word phrases and no cap, there are 281,814 cascades with $\alpha = 2.44$, and a lognormal again fits better than the power law. With two- to five-word phrases and the cap, $\alpha = 2.68$ with $x_{\min} = 235$. The goodness-of-fit test of \citet{clauset2009power}, with 200 simulated datasets, rules out the power law for the 10,000 largest cascades ($p < 0.005$) and does not rule it out for the cascades grouped by meaning ($p = 0.115$). We did not run it on the full set, where with nearly half a million cascades any small departure is significant and the likelihood ratio tests say more. The grouping by meaning uses all-MiniLM-L6-v2 embeddings and links posts with cosine similarity of at least 0.82, a threshold chosen on a held-out sample labeled by a word-overlap rule (F1 0.886); thresholds of 0.77 and 0.87 give 241 and 235 cascades.
 
-\section{Cox Model Diagnostics}
-\label{app:cox}
+\section{Adoption Models}
+\label{app:adoption}
 
-The static Cox models are fitted on 158,263 agent and cascade rows from 100 randomly sampled cascades with 2,027 adoption events. The pooled model with cascade-clustered robust errors has a concordance of 0.818 and passes the Schoenfeld test ($p = 0.34$), while the stratified model has a concordance of 0.764 and fails it decisively ($p < 10^{-200}$), so its hazard ratio should be read as an average over a time-varying effect. The time-varying models use 18,198 episode rows, with never-exposed agents collapsed into frequency-weighted rows (1,669,617 subjects in total), and are fitted with a Newton step size of 0.2 and no penalty; the Schoenfeld test does not apply to them in the same form. The earlier procedure, run on the 100 largest capped cascades with the static count, gives a hazard ratio of 0.498 (0.494 to 0.502) pooled and 0.640 stratified on 118,659 events. We did not fit a shared gamma frailty, which is not implemented in lifelines or statsmodels, and stratification by cascade takes its place.
-
-\section{Collaboration Details}
-\label{app:task3}
-
-Table~\ref{tab:thread_features} compares the events with their matched baseline threads. Under 20 random draws of the weights from the simplex, the Spearman correlation of $Q_{\text{spec}}$ with the original has a median of 0.942 (minimum 0.633), the success rate ranges from 0.171 to 0.768 against an original 0.238, and a median of 7.0\% of events change success status; for $Q_{\text{code}}$ the median correlation is 0.953 (minimum 0.904), the success rate ranges from 0.067 to 0.988 against 0.402, and a median of 19.5\% of events change status. The validation sheet contains 100 blinded events stratified by quintile of $Q_{\text{spec}}$, and we will add agreement statistics (Spearman correlation and Cohen's $\kappa$ against both scores) in a revision once the ratings are complete. For comparison with our earlier version, a one-sample $t$-test of event quality against the constant 0.5 gives $d = -0.88$ under $Q_{\text{code}}$ and $d = -0.56$ under $Q_{\text{spec}}$, which is the source of the earlier negative result.
+Table~\ref{tab:adoption} gives the adoption models. Logistic standard errors are clustered by cascade. The Cox models use the same 100 random cascades. The model with a shared baseline and the earlier counting rule passes the Schoenfeld test of proportional hazards ($p = 0.34$), while the model with a separate baseline per cascade fails it ($p < 0.001$), so its hazard ratio is an average over a changing effect. Run the earlier way, on the 100 largest cascades with the earlier counting rule, the Cox model gives a hazard ratio of 0.50, close to the earlier 0.53. When exposure runs the other way, from authors to the agents who comment on their posts, the logistic coefficients are 0.858 and $-0.035$.
 
 \begin{table}[H]
 \centering
-\caption{Thread features of collaborative events and of their matched baseline threads (means).}
-\label{tab:thread_features}
-\begin{tabular}{@{}lrrrrrr@{}}
+\caption{Adoption models.}
+\label{tab:adoption}
+\small
+\begin{tabular}{@{}llrr@{}}
 \toprule
-\textbf{Group} & \textbf{$n$} & \textbf{Comments} & \textbf{Keywords} & \textbf{Characters} & \textbf{Participants} & \textbf{Minutes} \\
+\textbf{Model} & \textbf{Term} & \textbf{Estimate} & \textbf{SE or 95\% CI} \\
 \midrule
-Collaborative events & 164 & 10.9 & 6.2 & 7,519 & 10.2 & 108.9 \\
-Matched baseline threads & 74 & 3.9 & 1.6 & 950 & 2.0 & 6.5 \\
+Logistic, 471,608 cascades & exposure & 0.648 & 0.003 \\
+ & exposure squared & $-0.020$ & 0.0003 \\
+\midrule
+ & & \textbf{Hazard ratio} & \\
+Cox, whole-window count, shared baseline & exposure & 0.009 & 0.002 to 0.041 \\
+Cox, whole-window count, baseline per cascade & exposure & 0.014 & 0.013 to 0.016 \\
+Cox, count over time, shared baseline & exposure & 1.170 & 1.160 to 1.180 \\
+Cox, count over time, baseline per cascade & exposure & 1.138 & 1.126 to 1.150 \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\section{Quality Scores}
+\label{app:quality}
+
+The comment quality part of $\qmain$ is the mean of the VADER compound score rescaled to $[0,1]$ and $\min(1, \text{words}/50)$. Across group threads the two scores have a rank correlation of 0.81. When we draw the weights at random 20 times, the rank correlation with the original weights has a median of 0.94 for $\qmain$ (lowest 0.63) and 0.95 for $\qalt$ (lowest 0.90). The share of successful threads ranges from 17\% to 77\% for $\qmain$ (originally 24\%) and from 7\% to 99\% for $\qalt$ (originally 40\%). We drew 100 group threads, stratified by $\qmain$, for blind human rating, and we will add agreement statistics in a revision once the ratings are complete. Matching on the number of agents as well as length and keywords lets 155 group threads find matches among 687 other threads, with an average matched score of 0.33 under $\qmain$.
 
 \end{document}
