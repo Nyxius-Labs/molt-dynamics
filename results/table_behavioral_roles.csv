@@ -1,6 +1,0 @@
-role,count,proportion,definition
-Specialist,0,0.0,normalized_entropy < -0.5 SD
-Connector,585,0.0064495501852178515,betweenness > 0.5 SD
-Initiator,8921,0.09835288410654436,post_comment_ratio > 0.5 SD and total_posts > 0 SD (above mean)
-Synthesizer,0,0.0,post_comment_ratio < -0.5 SD and in_degree > 0 SD (above mean)
-Generalist,81198,0.8951975657082378,none of the above

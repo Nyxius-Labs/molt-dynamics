@@ -1,8 +1,0 @@
-model,predictor,coefficient,se,se_type,p_value,hazard_ratio
-logistic[primary_uncapped_n2to5],intercept,-6.561759774923771,0.0033392381058144687,cluster(cascade),0.0,
-logistic[primary_uncapped_n2to5],exposure,0.6435344237244119,0.00260249856698072,cluster(cascade),0.0,
-logistic[primary_uncapped_n2to5],exposure_squared,-0.0196752087451024,0.0002782850303244757,cluster(cascade),0.0,
-cox[random100_static_pooled_clustered],exposure,-3.6109236973141248,1.1425955576989342,"robust, clustered by cascade",0.001576167311009529,0.027026870685049484
-cox[random100_static_stratified],exposure,-3.1595904249937368,0.05191124240440993,model-based,0.0,0.04244312116266083
-cox[random100_timevarying_pooled],exposure,0.33562114713229424,0.005538333841978811,model-based (frequency weights for collapsed never-exposed rows),0.0,1.3988089816190197
-cox[random100_timevarying_stratified],exposure,0.28980164094087096,0.007950046382855383,model-based (frequency weights for collapsed never-exposed rows),6.2059890830610765e-291,1.3361624218163641

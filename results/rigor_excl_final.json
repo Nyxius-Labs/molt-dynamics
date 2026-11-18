@@ -1,0 +1,349 @@
+{
+  "config": {
+    "data_dir": "moltbook-observatory-archive/data",
+    "start": "2026-01-28",
+    "end": "2026-02-20",
+    "out": "results/rigor_excl_final.json",
+    "smoke": null,
+    "null_iters": 100,
+    "shuffle_iters": 30,
+    "n_jobs": -1,
+    "cov_threshold": 0.75,
+    "exclude_dates": "2026-01-31,2026-02-09",
+    "gof_iters": 100,
+    "contagion_cascades": 800
+  },
+  "seed": 42,
+  "counts": {
+    "posts": 1086651,
+    "comments": 214454,
+    "unique_agents": 108044
+  },
+  "autonomy": {
+    "n_scored": 46083,
+    "cov_threshold": 0.75,
+    "n_autonomous": 11598,
+    "frac_autonomous": 0.25167632315604455,
+    "cov_quantiles": {
+      "0.1": 0.4835356568604418,
+      "0.25": 0.7454155998838947,
+      "0.5": 1.2649670359972247,
+      "0.75": 1.89851310120372,
+      "0.9": 2.562633156714332
+    },
+    "threshold_sweep": {
+      "0.3": 2997,
+      "0.5": 4859,
+      "0.75": 11598,
+      "1.0": 16423,
+      "1.5": 28908
+    }
+  },
+  "task1": {
+    "n_nodes": 18092,
+    "n_edges": 128376,
+    "periphery_frac_deg_le_1": 0.21141941189476013,
+    "gini_total_degree": 0.7352040675315068,
+    "observed": {
+      "reciprocity": 0.07417274256870443,
+      "transitivity": 0.01537667829875373,
+      "assortativity": -0.17943602312479362
+    }
+  },
+  "task1_nulls": {
+    "reciprocity": {
+      "observed": 0.07417274256870443,
+      "null_mean": 0.008381794760760829,
+      "null_std": 0.0003279168254759503,
+      "z": 200.63303464972327,
+      "emp_p": 0.0,
+      "null_n": 100
+    },
+    "transitivity": {
+      "observed": 0.01537667829875373,
+      "null_mean": 0.02081580083923099,
+      "null_std": 0.00022280596874748232,
+      "z": -24.411924739061647,
+      "emp_p": 0.0,
+      "null_n": 100
+    },
+    "assortativity": {
+      "observed": -0.17943602312479362,
+      "null_mean": -0.10775850062727071,
+      "null_std": 0.0009189594864336068,
+      "z": -77.99856637390671,
+      "emp_p": 0.0,
+      "null_n": 100
+    }
+  },
+  "task1_clusters": {
+    "k": 7,
+    "silhouette": 0.6515346920435368,
+    "sizes": [
+      5256,
+      7,
+      1319,
+      2,
+      78,
+      11428,
+      2
+    ],
+    "n_singletons": 0,
+    "largest_frac": 0.6316604023877957,
+    "note": "silhouette dominated by low-degree periphery; singletons are degree outliers, not roles"
+  },
+  "task1_leiden": {
+    "n_communities": 270,
+    "modularity": 0.3373021041697697,
+    "sizes_top": [
+      6972,
+      6865,
+      971,
+      748,
+      662,
+      228,
+      187,
+      185
+    ],
+    "modularity_vs_null": {
+      "null_mean": 0.11229260834181617,
+      "null_std": 0.001476416298789096,
+      "z": 152.4024734842729,
+      "emp_p": 0.0
+    },
+    "ari_leiden_vs_kmeans": 0.17102484674930246,
+    "ari_note": "low ARI => k-means degree-roles are not the community structure"
+  },
+  "comment_level_periphery": {
+    "comment_frac_no_reply": 0.9688697809320413,
+    "post_frac_no_comment": 0.9560291206652366,
+    "reading": "Holtz's 93.5% is comment-level no-reply; our 24.5% is agent reply-graph periphery; both correct under different denominators"
+  },
+  "task2": {
+    "n_cascades": 6689,
+    "total_adopting_agents": 195729,
+    "powerlaw": {
+      "n": 6689,
+      "alpha": 1.708289931041989,
+      "xmin": 3.0,
+      "n_tail": 3999,
+      "frac_mass_in_tail": 0.5978472118403348,
+      "lognormal": {
+        "R": -4.607733064735358,
+        "p": 4.070827970437023e-06,
+        "powerlaw_favored": false
+      },
+      "exponential": {
+        "R": 9.931032538645525,
+        "p": 3.05079840982857e-23,
+        "powerlaw_favored": true
+      },
+      "truncated_power_law": {
+        "R": -3.510134708278913,
+        "p": 3.5936417175364e-09,
+        "powerlaw_favored": false
+      },
+      "clauset_gof": {
+        "KS_D": 0.047992839909659746,
+        "gof_p": 0.0,
+        "gof_iters": 100,
+        "interpretation": "power-law REJECTED (p<0.1)"
+      },
+      "verdict": "heavy-tailed; power-law NOT distinguishable from lognormal (do not claim power-law); Clauset GOF also rejects the power-law (p<0.1)"
+    },
+    "size_gini_vs_null": {
+      "observed": 0.8599476031003875,
+      "null_mean": 0.8595033204554012,
+      "null_std": 7.62711331352837e-05,
+      "emp_p": 0.0
+    }
+  },
+  "task2_contagion": {
+    "n_cascades": 800,
+    "n_adoptions": 88009,
+    "cox_full": {
+      "exposure_coef": 2.8654442672470324e-06,
+      "hazard_ratio": 1.0000028654483726,
+      "p_clustered": 0.7178747817015612,
+      "reading": "HR<1 = decelerating ('saturating'); but see depletion test"
+    },
+    "cox_early_cohort": {
+      "hazard_ratio": 1.0502396978879207,
+      "p_clustered": 0.014732121828312352,
+      "reading": "if HR -> 1 vs full, the saturation is susceptible depletion not behavior"
+    },
+    "depletion_null": {
+      "null_hr_mean": 0.9999741501976352,
+      "null_hr_std": 2.1112649349288638e-07,
+      "emp_p_obs_more_extreme": 1.0,
+      "reading": "Poisson-random adoption times; if null HR ~ observed HR, 'saturation' is mechanical"
+    }
+  },
+  "cascade_robustness": {
+    "verbatim": {
+      "n_cascades": 6689,
+      "sizes_summary": {
+        "n": 6689,
+        "mean": 29.261324562714904,
+        "median": 3.0,
+        "max": 15554,
+        "gini": 0.8599476031003875
+      },
+      "powerlaw": {
+        "n": 6689,
+        "alpha": 1.708289931041989,
+        "xmin": 3.0,
+        "n_tail": 3999,
+        "frac_mass_in_tail": 0.5978472118403348,
+        "lognormal": {
+          "R": -4.607733064735358,
+          "p": 4.070827970437023e-06,
+          "powerlaw_favored": false
+        },
+        "exponential": {
+          "R": 9.931032538645525,
+          "p": 3.05079840982857e-23,
+          "powerlaw_favored": true
+        },
+        "truncated_power_law": {
+          "R": -3.510134708278913,
+          "p": 3.5936417175364e-09,
+          "powerlaw_favored": false
+        },
+        "verdict": "heavy-tailed; power-law NOT distinguishable from lognormal (do not claim power-law)"
+      }
+    },
+    "minhash_neardup": {
+      "n_cascades": 3511,
+      "sizes_summary": {
+        "n": 3511,
+        "mean": 13.847052121902593,
+        "median": 3.0,
+        "max": 9407,
+        "gini": 0.7831994634946394
+      },
+      "powerlaw": {
+        "n": 3511,
+        "alpha": 2.0098421038989063,
+        "xmin": 2.0,
+        "n_tail": 3511,
+        "frac_mass_in_tail": 1.0,
+        "lognormal": {
+          "R": -1.6773684038041268,
+          "p": 0.09347046393482836,
+          "powerlaw_favored": false
+        },
+        "exponential": {
+          "R": 5.0108134559347866,
+          "p": 5.42004354386603e-07,
+          "powerlaw_favored": true
+        },
+        "truncated_power_law": {
+          "R": -1.48361676854512,
+          "p": 0.002682355490369215,
+          "powerlaw_favored": false
+        },
+        "verdict": "heavy-tailed; power-law NOT distinguishable from lognormal (do not claim power-law)"
+      }
+    },
+    "ngram_sampled": {
+      "n_grams_shared": 164791,
+      "sizes_summary": {
+        "n": 164791,
+        "mean": 5.598794837096686,
+        "median": 2.0,
+        "max": 1577,
+        "gini": 0.5880695281471976
+      },
+      "note": "paper's n-gram cascades over-count (one agent's post contributes to many grams)"
+    }
+  },
+  "task3": {
+    "n_collab": 2863,
+    "n_single": 5,
+    "n_matched_single": 3,
+    "biased": {
+      "collab_mean": 0.5643381068808943,
+      "single_mean": 0.7333333333333334,
+      "t": -1.1625524473782194,
+      "p": 0.3647809725669296,
+      "cohens_d": -0.7049823390556301,
+      "cohens_d_ci95": [
+        -1.7971327179919945,
+        0.2644117274376329
+      ],
+      "collab_better": false
+    },
+    "neutral": {
+      "collab_mean": 0.4706112469437653,
+      "single_mean": 0.58,
+      "t": -1.1456707940650628,
+      "p": 0.37016225525184704,
+      "cohens_d": -0.5041608099740702,
+      "cohens_d_ci95": [
+        -1.2799708257320968,
+        0.2290964469862617
+      ],
+      "collab_better": false
+    },
+    "note": "'biased'=paper's single-agent-favoring metric; 'neutral'=collaboration-neutral"
+  },
+  "autonomy_split": {
+    "autonomous": {
+      "posts": 181295,
+      "comments": 1545,
+      "graph_nodes": 161,
+      "graph_edges": 134,
+      "periphery_frac": 0.7639751552795031,
+      "reciprocity": 0.1044776119402985,
+      "transitivity": 0.0398936170212766,
+      "n_cascades": 1140
+    },
+    "human_steered": {
+      "posts": 789712,
+      "comments": 209847,
+      "graph_nodes": 9604,
+      "graph_edges": 91620,
+      "periphery_frac": 0.13785922532278216,
+      "reciprocity": 0.0969438987120716,
+      "transitivity": 0.030794776869662935,
+      "n_cascades": 4998
+    },
+    "reading": "if reciprocity/cascades concentrate in human-steered accounts, the 'coordination' is not autonomous"
+  },
+  "periodicity": {
+    "n_agents": 4000,
+    "median_dom_period_h": 0.6156716417910447,
+    "frac_strong_periodic": 0.249,
+    "agreement_with_cov_filter": 0.73575,
+    "reading": "concurrent validity: do CoV-low (autonomous) agents also show strong periodicity?"
+  },
+  "fdr_bh": {
+    "t1.reciprocity": {
+      "p": 0.0,
+      "q": 0.0,
+      "sig_fdr": true
+    },
+    "t1.transitivity": {
+      "p": 0.0,
+      "q": 0.0,
+      "sig_fdr": true
+    },
+    "t1.assortativity": {
+      "p": 0.0,
+      "q": 0.0,
+      "sig_fdr": true
+    },
+    "t3.biased": {
+      "p": 0.3647809725669296,
+      "q": 0.37016225525184704,
+      "sig_fdr": false
+    },
+    "t3.neutral": {
+      "p": 0.37016225525184704,
+      "q": 0.37016225525184704,
+      "sig_fdr": false
+    }
+  },
+  "runtime_sec": 733.4
+}

@@ -1,0 +1,47 @@
+[
+  {
+    "thr": 0.3,
+    "n_auto": 6670,
+    "auto_reply_nodes": 2,
+    "auto_comments": 93,
+    "human_share_comments": 100.0,
+    "human_share_nodes": 100.0,
+    "human_share_cascades": 97.3
+  },
+  {
+    "thr": 0.5,
+    "n_auto": 9681,
+    "auto_reply_nodes": 24,
+    "auto_comments": 338,
+    "human_share_comments": 99.8,
+    "human_share_nodes": 99.8,
+    "human_share_cascades": 95.9
+  },
+  {
+    "thr": 0.75,
+    "n_auto": 17031,
+    "auto_reply_nodes": 174,
+    "auto_comments": 1629,
+    "human_share_comments": 99.3,
+    "human_share_nodes": 98.4,
+    "human_share_cascades": 92.8
+  },
+  {
+    "thr": 1.0,
+    "n_auto": 22481,
+    "auto_reply_nodes": 588,
+    "auto_comments": 4682,
+    "human_share_comments": 97.9,
+    "human_share_nodes": 94.4,
+    "human_share_cascades": 87.2
+  },
+  {
+    "thr": 1.5,
+    "n_auto": 38019,
+    "auto_reply_nodes": 2969,
+    "auto_comments": 18857,
+    "human_share_comments": 91.5,
+    "human_share_nodes": 69.1,
+    "human_share_cascades": 71.8
+  }
+]
